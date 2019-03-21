@@ -16,5 +16,9 @@ public class Save implements java.io.Serializable{
     	this.level = level;
     	this.questsCompleted = questsCompleted;
     }
+    
+    public Save() {
+    	
+    }
 
 }

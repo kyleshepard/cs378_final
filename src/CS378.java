@@ -26,7 +26,9 @@ public class CS378 {
 	public static int[] yRes = {1080, 720, 576};
 	public static int res = 1;
 	private static boolean fullscreen = false;
-	private static double frameRate = 60;
+	
+	final static double frameRate = 60.0;
+	final static double skipTicks = 1000.0/frameRate;
 	
 	public static String curdir = System.getProperty("user.dir");
 	
@@ -34,6 +36,8 @@ public class CS378 {
 	private JTextField Name;
 	private JTextField Level;
 	private JTextField QuestsCompleted;
+	
+	Save save1 = null;
 
 	/**
 	 * Launch the application.
@@ -46,6 +50,29 @@ public class CS378 {
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
+				}
+				
+				boolean gameRunning = true;
+				long nextGameTick = System.currentTimeMillis();
+				int sleepTime = 0;
+				
+				
+				while(!gameRunning) {
+					//update and launch threads
+					//draw screen
+					
+					nextGameTick += skipTicks;
+					sleepTime = (int) (nextGameTick - System.currentTimeMillis());
+					if(sleepTime >= 0) {
+						
+						try { Thread.sleep(sleepTime);
+						} catch (InterruptedException e) {
+							System.out.println("sleep failed");
+						}
+					}
+					else {
+						System.out.println("We gotta hurry up!");
+					}
 				}
 			}
 		});
@@ -72,16 +99,7 @@ public class CS378 {
 			frame.setUndecorated(true);
 		}
 
-		JPanel background = new JPanel() {
-			/*@Override
-			  protected void paintComponent(Graphics g) {
-				ImageIcon icon = new ImageIcon(curdir + "/assets/teddy.jpg");
-				Image bkg = icon.getImage();
-				bkg = bkg.getScaledInstance(xRes[res], yRes[res], Image.SCALE_DEFAULT);
-			    super.paintComponent(g);
-			        g.drawImage(bkg, 0, 0, null);
-			}*/
-		};
+		JPanel background = new JPanel();
 		background.setBounds(0, 0, xRes[res], yRes[res]);
 		background.setBackground(new Color(33,33,33));
 		background.setPreferredSize(new Dimension(xRes[res],yRes[res]));
@@ -91,11 +109,8 @@ public class CS378 {
 		JLabel backgroundLabel = new JLabel(resizeIcon(new ImageIcon(curdir + "/assets/testbkg.jpg"),xRes[res],yRes[res]));
 		background.add(backgroundLabel);
 		
-		JPanel UIPanel = new JPanel() {
-		};
-		//UIPanel.setVisible(false);
+		JPanel UIPanel = new JPanel();
 		UIPanel.setPreferredSize(new Dimension(xRes[res],yRes[res]));
-		//UIPanel.setBackground(new Color(33, 33, 33));
 		frame.getContentPane().add(UIPanel, BorderLayout.CENTER);
 		UIPanel.setLayout(null);
 		
@@ -104,12 +119,12 @@ public class CS378 {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Save save1 = new Save(Name.getText(),Integer.parseInt(Level.getText()), Integer.parseInt(QuestsCompleted.getText()));
+				save1 = new Save(Name.getText(),Integer.parseInt(Level.getText()), Integer.parseInt(QuestsCompleted.getText()));
 		        String curdir = System.getProperty("user.dir");
 
 		        try {
 		            FileOutputStream fileOut =
-		            new FileOutputStream(curdir + "save.dat");
+		            new FileOutputStream(curdir + "/saves/save1.dat");
 		            ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		            out.writeObject(save1);
 		            out.close();
@@ -130,10 +145,10 @@ public class CS378 {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Save save1 = null;
+				
 			      String curdir = System.getProperty("user.dir");
 			      try {
-			         FileInputStream fileIn = new FileInputStream(curdir + "save.dat");
+			         FileInputStream fileIn = new FileInputStream(curdir + "/saves/save1.dat");
 			         ObjectInputStream in = new ObjectInputStream(fileIn);
 			         save1 = (Save) in.readObject();
 			         in.close();
@@ -153,9 +168,9 @@ public class CS378 {
 			      System.out.println("Health: " + save1.health);
 			      System.out.println("Location: [" + save1.xPos + "][" + save1.yPos + "]");
 			      System.out.println("Quests Completed: " + save1.questsCompleted);
-			      System.out.println("Inventory: ");
+			      System.out.print("Inventory: ");
 			      for ( String s : save1.inventory){
-			          System.out.print(s + " ");
+			          System.out.print("[" + s + "] ");
 			      }
 				
 			}
@@ -178,8 +193,6 @@ public class CS378 {
 		QuestsCompleted.setColumns(10);
 		QuestsCompleted.setBounds(0, 75, 100, 25);
 		UIPanel.add(QuestsCompleted);
-		//backgroundLabel.setPreferredSize(new Dimension(xRes[res],yRes[res]));
-		
 		
 		frame.pack();
 	}
