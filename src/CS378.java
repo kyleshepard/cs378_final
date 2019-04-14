@@ -64,7 +64,7 @@ public class CS378 {
 					nextGameTick += skipTicks;
 					sleepTime = (int) (nextGameTick - System.currentTimeMillis());
 					if(sleepTime >= 0) {
-						
+					
 						try { Thread.sleep(sleepTime);
 						} catch (InterruptedException e) {
 							System.out.println("sleep failed");
