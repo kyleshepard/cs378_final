@@ -5,21 +5,17 @@ public class Entity {
 	private double strength;
 	//ImageIcon sprite;
 	
-	public Entity(String _name, int _health, int _strength /* ImageIcon _sprite */) { //fully featured constructor for basic entity. (might delete later)
-		init(_name, _health, _strength /*, ImageIcon _sprite*/);
+	public Entity(String _name, int _health, int _strength /*, ImageIcon _sprite */) { //fully featured constructor for basic entity. (might delete later)
+		name = _name;
+		health = _health;
+		strength = _strength;
+		//sprite = _sprite;
 	}
 	
 	public Entity() {	// default constructor
 		name = "unknown entity";
 		health = 100;
 		strength = 1.0;
-	}
-	
-	void init(String _name, int _health, int _strength /*, ImageIcon _sprite */){
-		name = _name;
-		health = _health;
-		strength = _strength;
-		//sprite = _sprite;
 	}
 	
 	public void setName(String _name) { name = _name; }

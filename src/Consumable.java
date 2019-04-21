@@ -1,17 +1,17 @@
 
 public class Consumable extends Item{
 	
-protected int damage;
+protected int strength;
 	
 	public Consumable() {
 		
 	}
 	
-	public Consumable(String name, String description, int ID, int value, int damage) {
+	public Consumable(String name, String description, int ID, int value, int strength) {
 		super(name, description, ID, value);
-		this.damage = damage;
+		this.strength = strength;
 	}
 	
-	public int getDamage() { return damage; }
+	public int getStrength() { return strength; }
 
 }

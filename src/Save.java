@@ -10,15 +10,21 @@ public class Save implements java.io.Serializable{
     public int yPos = 0;
     public String[] inventory = {"Potion","Sword of Truth","10 Pesos"};
     public int questsCompleted = 0;
+    public Room curr;
 
-    public Save(String name, int level, int questsCompleted){
+    public Save(String name, int level, int questsCompleted,Room curr){
     	this.name = name;
     	this.level = level;
     	this.questsCompleted = questsCompleted;
+    	this.curr = curr;
     }
     
     public Save() {
     	
+    }
+    
+    public Room getCurrentRoom(){
+    	return curr;
     }
 
 }
