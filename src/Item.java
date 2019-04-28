@@ -1,5 +1,6 @@
+import java.awt.Point;
 
-public class Item {
+public class Item implements Clickable{
 	protected String name;
 	protected String description;
 	protected int ID;
@@ -16,9 +17,24 @@ public class Item {
 		this.value = value;
 	}
 	
+	public void onClick() {
+		
+		if(Player.addItemToInventory(this)) {
+			System.out.println(name + " added to inventory.");
+		}
+		else{
+			System.out.println("Failed to add " + name + " to inventory. Inventory is full.");
+		}
+	}
+	
 	public String getName() { return name; }
 	public String getDescription() { return description; }
 	public int getID() { return ID; }
 	public int getValue() { return value; }
+
+	@Override
+	public Point updateLocation(Point p, int dx, int dy) {
+		return p;
+	}
 	
 }
