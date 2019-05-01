@@ -14,7 +14,7 @@ public class CS378 extends KeyAdapter{
 		//default game resolutions
 	public static int[] xRes = {1920, 1280, 1024};
 	public static int[] yRes = {1080, 720, 576};
-	public static int res = 1;
+	public static int res = 2;
 	Res r = new Res(xRes[res], yRes[res]);
 	private static boolean fullscreen = false;
 	
@@ -35,7 +35,7 @@ public class CS378 extends KeyAdapter{
 	
 	public static Player p = new Player("Kyle Jay",100,12);
 	static ClickableObject player = new ClickableObject(p);
-	static Point playerDestination = new Point(player.getLocation());
+	static Point playerDest = new Point(player.getLocation());
 	static int dx;
 	static int dy;
 
@@ -61,13 +61,14 @@ public class CS378 extends KeyAdapter{
 				Runnable updateEntityLocations = new Runnable() {
 					@Override
 					public void run() {
-						//update player and entity locations
-						UIPanel.setFocusable(true); //does nothing
-						if((Math.abs(playerDestination.getY() - player.getY()) > (Res.y / 32.0)) || (Math.abs(playerDestination.getX() - player.getX()) > (Res.y / 16.0))) {
+						double diffX = playerDest.getX() - player.getX();
+						double diffY = playerDest.getY() - player.getY();
+						
+						if(Math.hypot(diffX, diffY) > player.getWidth() / 2) {
 							p.setHasDestination(true);
 						}
-						player.setLocation(player.updateLocation(new Point(player.getLocation()),playerDestination));
-						System.out.println(p.hasDestination);
+						player.setLocation(player.updateLocation(new Point(player.getLocation()),playerDest));
+						//System.out.println(p.hasDestination);
 						//player.setLocation(p.getX(), p.getY());
 					}
 				};
@@ -159,11 +160,11 @@ public class CS378 extends KeyAdapter{
 		player.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/player.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
 		player.setBounds(0.4, 0.4, 1.0 / 28.4, 1.0 / 8.0);
 		UIPanel.add(player);
-		playerDestination = player.getLocation();
+		playerDest = player.getLocation();
 		
 		UIPanel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				playerDestination.setLocation(new Point(e.getX(), e.getY()));
+				playerDest.setLocation(new Point(e.getX() - player.getWidth()/2, e.getY() - player.getHeight()/2));
 				//System.out.println("clicked location: " + playerDestination);
 			}
 		});

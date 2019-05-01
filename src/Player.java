@@ -34,23 +34,26 @@ public class Player extends Entity{
 
 	@Override
 	public Point updateLocation(Point p1, Point p2) {
+		
 		double diffY = (p2.getY() - p1.getY());
 		double diffX = (p2.getX() - p1.getX());
 		double newX = p1.getX();
 		double newY = p1.getY();
 		
 		if(hasDestination) {
-			if(Math.abs(diffX) < (Res.y / 32.0) || Math.abs(diffY) < (Res.y / 16.0))
+			if(Math.hypot(diffX, diffY) <= Res.y / 32.0) {
+				System.out.println(Math.hypot(diffX, diffY));
 				hasDestination = false;
+			}
 			
 			if (p1.getX() != p2.getX()) {
-				newX += 2 * Math.cos(Math.atan2(diffY, diffX));
-				newY += 2 * Math.sin(Math.atan2(diffY, diffX));
+				newX += 3 * Math.cos(Math.atan2(diffY, diffX));
+				newY += 3 * Math.sin(Math.atan2(diffY, diffX));
 			
 			} else if (p2.getY() < p1.getY()){
-				newY -= 2 ;
+				newY -= 3 ;
 			} else {
-				newY += 2;
+				newY += 3;
 			}
 		}
 		
