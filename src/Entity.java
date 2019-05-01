@@ -9,7 +9,8 @@ public abstract class Entity implements Clickable{
 	protected int health;
 	protected double strength;
 	protected ImageIcon sprite;
-	protected int xPos, yPos;
+	//protected int xPos, yPos;
+	protected boolean hasDestination;
 	
 	public Entity(String name, int health, int strength) { //fully featured constructor for basic entity. (might delete later)
 		this.name = name;
@@ -29,18 +30,20 @@ public abstract class Entity implements Clickable{
 		
 	}
 	
-	public Point updateLocation(Point p, int dx, int dy) {
-		return p;
+	public Point updateLocation(Point p1, Point p2) {
+		return p1;
 	}
 	public void setName(String _name) { name = _name; }
 	public void setHealth(int _health) { health = _health; }
 	public void setStrength(double _strength) { strength = _strength; }
+	public void setHasDestination(boolean hasDestination) { this.hasDestination = hasDestination; }
 	
 	public String getName() { return name; }
 	public int getHealth() { return health; }
 	public double getStrength() { return strength; }
 
-	public int getX() { return xPos; }
-	public int getY() { return yPos; }
+	//public int getX() { return xPos; }
+	//public int getY() { return yPos; }
+	//public boolean hasDestination() { return hasDestination; }
 
 }

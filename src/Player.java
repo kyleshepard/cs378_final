@@ -33,16 +33,30 @@ public class Player extends Entity{
 	}
 
 	@Override
-	public Point updateLocation(Point p, int dx, int dy) {
+	public Point updateLocation(Point p1, Point p2) {
+		double diffY = (p2.getY() - p1.getY());
+		double diffX = (p2.getX() - p1.getX());
+		double newX = p1.getX();
+		double newY = p1.getY();
 		
-		int newX = p.x + (int)(Res.x * 0.005 * dx);
-		int newY = p.y + (int)(Res.x * 0.005 * dy);
+		if(hasDestination) {
+			if(Math.abs(diffX) < (Res.y / 32.0) || Math.abs(diffY) < (Res.y / 16.0))
+				hasDestination = false;
+			
+			if (p1.getX() != p2.getX()) {
+				newX += 2 * Math.cos(Math.atan2(diffY, diffX));
+				newY += 2 * Math.sin(Math.atan2(diffY, diffX));
+			
+			} else if (p2.getY() < p1.getY()){
+				newY -= 2 ;
+			} else {
+				newY += 2;
+			}
+		}
 		
-		//collision detection
-		
-		p.x = newX;
-		p.y = newY;
-		return p;
+		p1.setLocation(newX, newY);
+		//System.out.println(p2.getLocation());
+		return p1;
 	}
 
 }

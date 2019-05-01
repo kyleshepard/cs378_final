@@ -33,8 +33,8 @@ public class Item implements Clickable{
 	public int getValue() { return value; }
 
 	@Override
-	public Point updateLocation(Point p, int dx, int dy) {
-		return p;
+	public Point updateLocation(Point p1, Point p2) {
+		return p1;
 	}
 	
 }

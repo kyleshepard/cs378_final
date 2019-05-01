@@ -20,8 +20,8 @@ public class ClickableObject extends UIObject {
 	}
 	
 	
-	public Point updateLocation(Point p, int dx, int dy) {
-		return obj.updateLocation(p, dx, dy);
+	public Point updateLocation(Point p1, Point p2) {
+		return obj.updateLocation(p1, p2);
 	}
 	public Clickable getObject() { return obj;	}
 }

@@ -4,15 +4,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.concurrent.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class CS378 extends KeyAdapter{
 		//default game resolutions
 	public static int[] xRes = {1920, 1280, 1024};
 	public static int[] yRes = {1080, 720, 576};
-	public static int res = 0;
+	public static int res = 1;
 	Res r = new Res(xRes[res], yRes[res]);
-	private static boolean fullscreen = true;
+	private static boolean fullscreen = false;
 	
 		//variables used for maintaining game speed
 	final static double frameRate = 60.0;
@@ -31,11 +35,12 @@ public class CS378 extends KeyAdapter{
 	
 	public static Player p = new Player("Kyle Jay",100,12);
 	static ClickableObject player = new ClickableObject(p);
+	static Point playerDestination = new Point(player.getLocation());
 	static int dx;
 	static int dy;
 
 	static //test room stuff
-	Room currentRoom = new Room("Cool City","DemoRoom1.png", 57, 0, 0, 0, 0);
+	Room currentRoom = new Room("Cool City","DemoRoom2.png", 57, 0, 0, 0, 0);
 	
 	/**
 	 * Launch the application.
@@ -52,39 +57,17 @@ public class CS378 extends KeyAdapter{
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				/*
-				boolean gameRunning = true;
-				long nextGameTick = System.currentTimeMillis();
-				int sleepTime = 0;
-				
-				
-				while(gameRunning) {
-					//update and launch threads
-					//draw screen
-					updateEntityLocations();
-					redraw();
-					
-					nextGameTick += skipTicks;
-					sleepTime = (int) (nextGameTick - System.currentTimeMillis());
-					if(sleepTime >= 0) {
-					
-						try { Thread.sleep(sleepTime);
-						} catch (InterruptedException e) {
-							System.out.println("sleep failed");
-						}
-					}
-					else {
-						System.out.println("We gotta hurry up!");
-					}
-				}
-				*/
 				
 				Runnable updateEntityLocations = new Runnable() {
 					@Override
 					public void run() {
 						//update player and entity locations
 						UIPanel.setFocusable(true); //does nothing
-						player.setLocation(player.updateLocation(new Point(player.getLocation()),dx,dy));
+						if((Math.abs(playerDestination.getY() - player.getY()) > (Res.y / 32.0)) || (Math.abs(playerDestination.getX() - player.getX()) > (Res.y / 16.0))) {
+							p.setHasDestination(true);
+						}
+						player.setLocation(player.updateLocation(new Point(player.getLocation()),playerDestination));
+						System.out.println(p.hasDestination);
 						//player.setLocation(p.getX(), p.getY());
 					}
 				};
@@ -101,12 +84,6 @@ public class CS378 extends KeyAdapter{
 				scheduledPool.scheduleWithFixedDelay(updateEntityLocations, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				scheduledPool.scheduleWithFixedDelay(redraw, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				
-				
-				
-				while(true) {
-					break;
-				
-				}
 			}
 		});
 	}
@@ -174,79 +151,22 @@ public class CS378 extends KeyAdapter{
 		UIPanel.add(heart);
 		
 		ClickableObject sheriff = new ClickableObject(new QuestGiver("Sheriff",100,20));
-		sheriff.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/sheriff.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
-		sheriff.setBounds(0.6, 0.6, 1.0 / 14.2, 1.0 / 8.0);
+		sheriff.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/sheriff.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
+		sheriff.setBounds(0.6, 0.6, 1.0 / 28.4, 1.0 / 8.0);
 		UIPanel.add(sheriff);
 		
 		
-		player.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/player.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
-		player.setBounds(0.4, 0.4, 1.0 / 14.2, 1.0 / 8.0);
+		player.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/player.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
+		player.setBounds(0.4, 0.4, 1.0 / 28.4, 1.0 / 8.0);
 		UIPanel.add(player);
+		playerDestination = player.getLocation();
 		
-		
-		UIPanel.setFocusable(true);
-		Action moveUpY = new AbstractAction() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dy = -1;
+		UIPanel.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				playerDestination.setLocation(new Point(e.getX(), e.getY()));
+				//System.out.println("clicked location: " + playerDestination);
 			}
-		};
-		Action moveDownY = new AbstractAction() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dy = +1;
-			}
-		};
-		Action stopY= new AbstractAction() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dy = 0;
-			}
-		};
-		Action moveLX = new AbstractAction() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dx = -1;
-			}
-		};
-		Action moveRX = new AbstractAction() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dx = +1;
-			}
-		};
-		Action stopX= new AbstractAction() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dx = 0;
-			}
-		};
-		UIPanel.getInputMap().put(KeyStroke.getKeyStroke("W"),"pressedW");
-		UIPanel.getActionMap().put("pressedW", moveUpY);
-		UIPanel.getInputMap().put(KeyStroke.getKeyStroke("released W"),"releasedW");
-		UIPanel.getActionMap().put("releasedW", stopY);
-		
-		UIPanel.getInputMap().put(KeyStroke.getKeyStroke("S"),"pressedS");
-		UIPanel.getActionMap().put("pressedS", moveDownY);
-		UIPanel.getInputMap().put(KeyStroke.getKeyStroke("released S"),"releasedS");
-		UIPanel.getActionMap().put("releasedS", stopY);
-		
-		UIPanel.getInputMap().put(KeyStroke.getKeyStroke("A"),"pressedA");
-		UIPanel.getActionMap().put("pressedA", moveLX);
-		UIPanel.getInputMap().put(KeyStroke.getKeyStroke("released A"),"releasedA");
-		UIPanel.getActionMap().put("releasedA", stopX);
-		
-		UIPanel.getInputMap().put(KeyStroke.getKeyStroke("D"),"pressedD");
-		UIPanel.getActionMap().put("pressedD", moveRX);
-		UIPanel.getInputMap().put(KeyStroke.getKeyStroke("released D"),"releasedD");
-		UIPanel.getActionMap().put("releasedD", stopX);
-		
+		});
 		
 		frame.pack();
 	}
@@ -257,5 +177,6 @@ public class CS378 extends KeyAdapter{
 		img = img.getScaledInstance(xSize, ySize,  java.awt.Image.SCALE_SMOOTH);
 		return new ImageIcon(img); 
 	}
+	
 	
 }
