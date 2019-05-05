@@ -29,6 +29,7 @@ public class CS378 extends KeyAdapter{
 	private static UIObject healthUI = new UIObject();
 	private static UIObject compassUI = new UIObject();
 	
+		//used for keeping track of player and movement of player
 	public static Player p = new Player("Kyle Jay",100,12);
 	public static ClickableObject player = new ClickableObject(p);
 	public static Point playerDest = new Point(player.getLocation());
@@ -55,19 +56,21 @@ public class CS378 extends KeyAdapter{
 				Runnable updateEntityLocations = new Runnable() {
 					@Override
 					public void run() {
+							//calculate distance between player and destination
 						double diffX = playerDest.getX() - player.getX();
 						double diffY = playerDest.getY() - player.getY();
 						
+							//only bother moving if the player isn't already there
 						if(Math.hypot(diffX, diffY) > player.getWidth() / 2) {
 							p.setHasDestination(true);
 						}
+							//moves player towards destination if member variable hasDestination is true
 						player.setLocation(player.updateLocation(new Point(player.getLocation()),playerDest));
-						//System.out.println(p.hasDestination);
-						//player.setLocation(p.getX(), p.getY());
+						
 					}
 				};
 				
-				Runnable redraw = new Runnable() {
+				Runnable redraw = new Runnable() {	//quite possibly useless, but were gonna leave it anyway
 					@Override
 					public void run() {
 						frame.revalidate();
@@ -75,6 +78,7 @@ public class CS378 extends KeyAdapter{
 					}
 				};
 				
+					//launch all threads 60 times a second as dictated by variable "framerate"
 				scheduledPool.scheduleWithFixedDelay(updateEntityLocations, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				scheduledPool.scheduleWithFixedDelay(redraw, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				
@@ -128,12 +132,12 @@ public class CS378 extends KeyAdapter{
 		layeredPane.add(UIPanel);
 		UIPanel.setLayout(null);
 		
-		
+			//define UI elements
+				//HP monitor
 		healthUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/uielements/heart.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
 		healthUI.setBounds(0.05, 6.8 / 8.0, 1.0 / 14.2, 1.0 / 8.0);
 		UIPanel.add(healthUI);
-		
-		
+				//Compass for navigation
 		compassUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/uielements/compassrose.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
 		compassUI.setBounds((Res.x / 2) - ((int)(Res.y/8.0) / 2), (int)(6.8 * Res.y / 8.0), (int)(Res.y/8.0), (int)(Res.y/8.0));
 		UIPanel.add(compassUI);
@@ -155,12 +159,12 @@ public class CS378 extends KeyAdapter{
 		UIPanel.add(player);
 		playerDest = player.getLocation();
 		
+			//mouse click listener to set destinations for player to go to
 		UIPanel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				playerDest.setLocation(new Point(e.getX() - player.getWidth()/2, e.getY() - player.getHeight()/2));
-				//System.out.println("clicked location: " + playerDestination);
-			}
+				playerDest.setLocation(new Point(e.getX() - player.getWidth()/2, e.getY() - player.getHeight()/2));			}
 		});
+			//temporary solution to exit game by pressing the '1' key
 		Action quit= new AbstractAction() {
 
 			@Override

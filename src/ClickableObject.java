@@ -13,24 +13,21 @@ public class ClickableObject extends UIObject {
 		this.obj = obj;
 		
 		addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-
+			public void mouseClicked(MouseEvent e) {	//evoked when ClickableObject is clicked on
 				
-				Thread t = new Thread() {
+				Thread t = new Thread() {	//launch new thread to handle loop otherwise game screen freezes until player stops moving
 					public void run(){
-						CS378.playerDest = getLocation();
-						CS378.p.setHasDestination(true);
-						System.out.println(CS378.p.hasDestination());
+						CS378.playerDest = getLocation();	//set player destination to object's coordinates
+						CS378.p.setHasDestination(true);	//force game to recognize the player has a destination (or else loop below will be skipped)
 						
-						int i = 0;
-						while(CS378.p.hasDestination()) {
-							System.out.print("");
+						while(CS378.p.hasDestination()) {	//designed to do nothing until the player has stopped moving by reaching the object or colliding with something else
+							System.out.print("");			//for some godforsaken reason, java demands this be here otherwise the code below never gets executed. 
 						}
-						System.out.println("escaped!");
-						double diffX = CS378.playerDest.getX() - CS378.player.getX();
+
+						double diffX = CS378.playerDest.getX() - CS378.player.getX();	//calculate distance between player and object
 						double diffY = CS378.playerDest.getY() - CS378.player.getY();
-						//System.out.println(diffX + " " + diffY + " <= " + CS378.player.getWidth() + "?");
-						if (Math.hypot(diffX, diffY) <= CS378.player.getWidth()) {
+
+						if (Math.hypot(diffX, diffY) <= CS378.player.getWidth()) {		//only allow interaction if player and object are close enough
 							obj.onClick();
 						}
 						
@@ -47,6 +44,6 @@ public class ClickableObject extends UIObject {
 	public Point updateLocation(Point p1, Point p2) {
 		return obj.updateLocation(p1, p2);
 	}
-	public Clickable getObject() { return obj;	}
+	public Clickable getObject() { return obj;}
 	
 }
