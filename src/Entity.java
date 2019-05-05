@@ -40,6 +40,7 @@ public abstract class Entity implements Clickable{
 	public String getName() { return name; }
 	public int getHealth() { return health; }
 	public double getStrength() { return strength; }
+	public boolean hasDestination() { return hasDestination; }
 	public boolean isActive() { return true; }
 
 }

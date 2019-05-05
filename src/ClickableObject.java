@@ -14,9 +14,30 @@ public class ClickableObject extends UIObject {
 		
 		addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				//System.out.println("Clicked on: " + getObject().getName());
-				CS378.playerDest = getLocation();
-				obj.onClick();
+
+				
+				Thread t = new Thread() {
+					public void run(){
+						CS378.playerDest = getLocation();
+						CS378.p.setHasDestination(true);
+						System.out.println(CS378.p.hasDestination());
+						
+						int i = 0;
+						while(CS378.p.hasDestination()) {
+							System.out.print("");
+						}
+						System.out.println("escaped!");
+						double diffX = CS378.playerDest.getX() - CS378.player.getX();
+						double diffY = CS378.playerDest.getY() - CS378.player.getY();
+						//System.out.println(diffX + " " + diffY + " <= " + CS378.player.getWidth() + "?");
+						if (Math.hypot(diffX, diffY) <= CS378.player.getWidth()) {
+							obj.onClick();
+						}
+						
+					}
+				};
+				t.start();
+				
 			}
 		});
 		

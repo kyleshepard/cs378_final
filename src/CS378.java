@@ -8,11 +8,11 @@ import java.util.concurrent.*;
 
 public class CS378 extends KeyAdapter{
 		//default game resolutions
-	public static int[] xRes = {1920, 1280, 1024};
-	public static int[] yRes = {1080, 720, 576};
-	public static int res = 0;
+	public static int[] xRes = {1920, 1366, 1280, 1024};
+	public static int[] yRes = {1080, 768, 720, 576};
+	public static int res = 3;
 	Res r = new Res(xRes[res], yRes[res]);
-	private static boolean fullscreen = true;
+	private static boolean fullscreen = false;
 	
 		//variables used for maintaining game speed
 	final static double frameRate = 60.0;
@@ -70,7 +70,6 @@ public class CS378 extends KeyAdapter{
 				Runnable redraw = new Runnable() {
 					@Override
 					public void run() {
-						
 						frame.revalidate();
 						frame.repaint();
 					}
@@ -176,13 +175,13 @@ public class CS378 extends KeyAdapter{
 	}
 	
 		//method resizeIcon takes ImageIcon object and preferred size and scales it using smooth scaling
-	private static ImageIcon resizeIcon(ImageIcon icon, int xSize, int ySize) {
+	static ImageIcon resizeIcon(ImageIcon icon, int xSize, int ySize) {
 		Image img = icon.getImage();
 		img = img.getScaledInstance(xSize, ySize,  java.awt.Image.SCALE_SMOOTH);
 		return new ImageIcon(img); 
 	}
 	
-	private static void loadRoom() {
+	static void loadRoom() {
 		//unload assets of current room
 		//load new assets (currentRoom = whatever);
 	}
