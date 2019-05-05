@@ -5,6 +5,7 @@ public class Item implements Clickable{
 	protected String description;
 	protected int ID;
 	protected int value;
+	protected boolean active;
 	
 	public Item() {
 		
@@ -21,11 +22,14 @@ public class Item implements Clickable{
 		
 		if(Player.addItemToInventory(this)) {
 			System.out.println(name + " added to inventory.");
+			active = false;
 		}
 		else{
 			System.out.println("Failed to add " + name + " to inventory. Inventory is full.");
 		}
 	}
+	
+	public void setActive( boolean active ) { this.active = active;}
 	
 	public String getName() { return name; }
 	public String getDescription() { return description; }
@@ -36,5 +40,7 @@ public class Item implements Clickable{
 	public Point updateLocation(Point p1, Point p2) {
 		return p1;
 	}
+	
+	public boolean isActive() { return active; }
 	
 }

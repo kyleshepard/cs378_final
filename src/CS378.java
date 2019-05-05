@@ -2,21 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.concurrent.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class CS378 extends KeyAdapter{
 		//default game resolutions
 	public static int[] xRes = {1920, 1280, 1024};
 	public static int[] yRes = {1080, 720, 576};
-	public static int res = 2;
+	public static int res = 0;
 	Res r = new Res(xRes[res], yRes[res]);
-	private static boolean fullscreen = false;
+	private static boolean fullscreen = true;
 	
 		//variables used for maintaining game speed
 	final static double frameRate = 60.0;
@@ -34,10 +30,8 @@ public class CS378 extends KeyAdapter{
 	private static UIObject compassUI = new UIObject();
 	
 	public static Player p = new Player("Kyle Jay",100,12);
-	static ClickableObject player = new ClickableObject(p);
-	static Point playerDest = new Point(player.getLocation());
-	static int dx;
-	static int dy;
+	public static ClickableObject player = new ClickableObject(p);
+	public static Point playerDest = new Point(player.getLocation());
 
 	static //test room stuff
 	Room currentRoom = new Room("Cool City","DemoRoom2.png", 57, 0, 0, 0, 0);
@@ -168,6 +162,15 @@ public class CS378 extends KeyAdapter{
 				//System.out.println("clicked location: " + playerDestination);
 			}
 		});
+		Action quit= new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				quitGame();
+			}
+		};
+		UIPanel.getInputMap().put(KeyStroke.getKeyStroke("1"),"pressed1");
+		UIPanel.getActionMap().put("pressed1",quit);
 		
 		frame.pack();
 	}
@@ -179,5 +182,15 @@ public class CS378 extends KeyAdapter{
 		return new ImageIcon(img); 
 	}
 	
+	private static void loadRoom() {
+		//unload assets of current room
+		//load new assets (currentRoom = whatever);
+	}
+	
+	private static void quitGame() {
+		frame.setVisible(false);
+		frame.dispose();
+		System.exit(0);
+	}
 	
 }

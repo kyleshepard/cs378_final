@@ -1,7 +1,5 @@
 
 import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class Player extends Entity{
 	
@@ -34,31 +32,21 @@ public class Player extends Entity{
 
 	@Override
 	public Point updateLocation(Point p1, Point p2) {
-		
+		double speed = Res.y/250;
 		double diffY = (p2.getY() - p1.getY());
 		double diffX = (p2.getX() - p1.getX());
 		double newX = p1.getX();
 		double newY = p1.getY();
 		
 		if(hasDestination) {
-			if(Math.hypot(diffX, diffY) <= Res.y / 32.0) {
-				System.out.println(Math.hypot(diffX, diffY));
-				hasDestination = false;
-			}
+			if(Math.hypot(diffX, diffY) <= Res.y / 32.0)
+				hasDestination = false;	
 			
-			if (p1.getX() != p2.getX()) {
-				newX += 3 * Math.cos(Math.atan2(diffY, diffX));
-				newY += 3 * Math.sin(Math.atan2(diffY, diffX));
+			newX += speed * Math.cos(Math.atan2(diffY, diffX));
+			newY += speed * Math.sin(Math.atan2(diffY, diffX));
 			
-			} else if (p2.getY() < p1.getY()){
-				newY -= 3 ;
-			} else {
-				newY += 3;
-			}
 		}
-		
 		p1.setLocation(newX, newY);
-		//System.out.println(p2.getLocation());
 		return p1;
 	}
 

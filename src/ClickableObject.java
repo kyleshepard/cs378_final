@@ -11,12 +11,15 @@ public class ClickableObject extends UIObject {
 	public ClickableObject(Clickable obj) {
 		super();
 		this.obj = obj;
+		
 		addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("Clicked on: " + getObject().getName());
+				//System.out.println("Clicked on: " + getObject().getName());
+				CS378.playerDest = getLocation();
 				obj.onClick();
 			}
 		});
+		
 	}
 	
 	
@@ -24,4 +27,5 @@ public class ClickableObject extends UIObject {
 		return obj.updateLocation(p1, p2);
 	}
 	public Clickable getObject() { return obj;	}
+	
 }

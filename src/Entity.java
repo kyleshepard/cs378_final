@@ -8,8 +8,7 @@ public abstract class Entity implements Clickable{
 	protected String name;
 	protected int health;
 	protected double strength;
-	protected ImageIcon sprite;
-	//protected int xPos, yPos;
+	protected String sprite;
 	protected boolean hasDestination;
 	
 	public Entity(String name, int health, int strength) { //fully featured constructor for basic entity. (might delete later)
@@ -41,9 +40,6 @@ public abstract class Entity implements Clickable{
 	public String getName() { return name; }
 	public int getHealth() { return health; }
 	public double getStrength() { return strength; }
-
-	//public int getX() { return xPos; }
-	//public int getY() { return yPos; }
-	//public boolean hasDestination() { return hasDestination; }
+	public boolean isActive() { return true; }
 
 }
