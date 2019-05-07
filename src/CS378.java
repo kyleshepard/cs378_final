@@ -34,8 +34,8 @@ public class CS378 extends KeyAdapter{
 	public static ClickableObject player = new ClickableObject(p);
 	public static Point playerDest = new Point(player.getLocation());
 
-	static //test room stuff
-	Room currentRoom = new Room("Cool City","DemoRoom2.png", 57, 0, 0, 0, 0);
+		//test room stuff
+	static Room currentRoom = new Room("Cool City","DemoRoom2.png", 57, 0, 0, 0, 0);
 	
 	/**
 	 * Launch the application.
@@ -53,7 +53,7 @@ public class CS378 extends KeyAdapter{
 					e.printStackTrace();
 				}
 				
-				Runnable updateEntityLocations = new Runnable() {
+				Runnable updatePlayerLocation = new Runnable() {
 					@Override
 					public void run() {
 							//calculate distance between player and destination
@@ -79,7 +79,7 @@ public class CS378 extends KeyAdapter{
 				};
 				
 					//launch all threads 60 times a second as dictated by variable "framerate"
-				scheduledPool.scheduleWithFixedDelay(updateEntityLocations, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
+				scheduledPool.scheduleWithFixedDelay(updatePlayerLocation, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				scheduledPool.scheduleWithFixedDelay(redraw, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				
 			}

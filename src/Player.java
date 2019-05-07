@@ -30,24 +30,6 @@ public class Player extends Entity{
 		return inventory;
 	}
 
-	@Override
-	public Point updateLocation(Point p1, Point p2) {
-		double speed = Res.y/250;
-		double diffY = (p2.getY() - p1.getY());
-		double diffX = (p2.getX() - p1.getX());
-		double newX = p1.getX();
-		double newY = p1.getY();
-		
-		if(hasDestination) {
-			if(Math.hypot(diffX, diffY) <= Res.y / 32.0)
-				hasDestination = false;	
-			
-			newX += speed * Math.cos(Math.atan2(diffY, diffX));
-			newY += speed * Math.sin(Math.atan2(diffY, diffX));
-			
-		}
-		p1.setLocation(newX, newY);
-		return p1;
-	}
+
 
 }
