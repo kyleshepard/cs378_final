@@ -1,9 +1,12 @@
 
 import java.awt.Point;
+import java.util.Vector;
 
 public class Player extends Entity{
 	
 	private static Item[] inventory = new Item[8];
+	
+	private static Vector<Quest> questList = new Vector<>();
 	
 	public Player() {
 		
@@ -25,7 +28,17 @@ public class Player extends Entity{
 		}
 		return false;
 	}
+	public static void addQuest(Quest crap) {
+		questList.add(crap);
+	}
 	
+	public static void deleteQuest(Quest crap) {
+		questList.remove(crap);
+	}
+	
+	public static Vector<Quest> getQuestList() {
+		return questList;
+	}
 	public static Item[] getInventory() {
 		return inventory;
 	}
