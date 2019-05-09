@@ -7,7 +7,8 @@ public class Room implements java.io.Serializable{
 	protected int ID;
 	protected int north, south, east, west;	//Room ID of rooms North, South, East, and West
 	protected String background;
-	Vector<ClickableObject> items = new Vector<>();
+	protected boolean firstVisit;
+	protected Vector<ClickableObject> objects = new Vector<>();
 	
 	public Room() {
 		
@@ -40,4 +41,5 @@ public class Room implements java.io.Serializable{
 	String getBackground() { return background; }
 	
 	int getID() { return ID; }
+	Vector<ClickableObject> getObjects() { return objects; }
 }

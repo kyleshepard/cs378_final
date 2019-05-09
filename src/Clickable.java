@@ -5,4 +5,5 @@ public interface Clickable {
 	public void onClick();
 	public Point updateLocation(Point p1, Point p2);
 	public boolean isActive();
+	public void setActive(boolean active);
 }

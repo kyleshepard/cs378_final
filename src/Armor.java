@@ -1,16 +1,16 @@
 
 public class Armor extends Item{
 	
-	protected int damageProtection;
+	protected int damageThreshold;
 	
 	public Armor() {
 		
 	}
 	
-	public Armor(String name, String description, int ID, int value, int damageProtection) {
+	public Armor(String name, String description, int ID, int value, int damageThreshold) {
 		super(name, description, ID, value);
-		this.damageProtection = damageProtection;
+		this.damageThreshold = damageThreshold;
 	}
 	
-	public int getDamageProtection() { return damageProtection; }
+	public int getDamageThreshold() { return damageThreshold; }
 }
