@@ -14,14 +14,15 @@ public class Room implements java.io.Serializable{
 		
 	}
 	
-	public Room(String name, String background, int ID, int north, int south, int east, int west) {
+	public Room(int ID, String name, String background, int north, int south, int east, int west) {
+		this.ID = ID;
 		this.name = name;
 		this.background = background;
-		this.ID = ID;
 		this.north = north;
 		this.south = south;
 		this.east = east;
 		this.west = west;
+		firstVisit = true;
 	}
 	
 	int getAdjacentRoom(char d) {
@@ -35,6 +36,11 @@ public class Room implements java.io.Serializable{
 			return west;
 		}
 		return 0;
+	}
+	
+	void firstTimeSetup() {	//evoked when room is loaded and firstVisit == true;
+		//search for ID value in Rooms.csv and load initial object conditions (i.e. Entities, Items, Doors, etc.)
+		firstVisit = false;
 	}
 	
 	String getName() { return name; }

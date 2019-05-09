@@ -40,7 +40,7 @@ public class CS378 extends KeyAdapter{
 	public static Point playerDest = new Point(player.getLocation());
 
 		//test room stuff
-	static Room currentRoom = new Room("Cool_City","DemoRoom2.png", 57, 0, 0, 0, 0);
+	static Room currentRoom = new Room(57,"Cool City","DemoRoom2.png", 0, 0, 0, 0);
 	
 	/**
 	 * Launch the application.
@@ -179,7 +179,7 @@ public class CS378 extends KeyAdapter{
 		UIPanel.add(compassUI);
 		
 		//test code
-		ClickableObject heart = new ClickableObject(new Item("heart","issa heart",5,789));
+		ClickableObject heart = new ClickableObject(new Item(1000,"heart",5,"issa heart"));
 		heart.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/heart.png"),(int)(Res.y/16.0), (int)(Res.y/16.0)));
 		heart.setBounds(0.5, 0.5, 1.0 / 14.2, 1.0 / 8.0);
 		UIPanel.add(heart);

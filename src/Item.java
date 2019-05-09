@@ -11,11 +11,11 @@ public class Item implements Clickable{
 		
 	}
 	
-	public Item(String name, String description, int ID, int value) {
-		this.name = name;
-		this.description = description;
+	public Item( int ID, String name, int value, String description ) {
 		this.ID = ID;
+		this.name = name;
 		this.value = value;
+		this.description = description;
 	}
 	
 	public void onClick() {
