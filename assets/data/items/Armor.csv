@@ -1,7 +1,7 @@
-ID,Name,Damage Threshold
-1000,Wood Armor,8
-1001,Crocodile Skin Armor,9
-1002,Chainmail,13
-1003,Iron Armor,20
-1004,Myamean Armor,22
-1005,Ever-Glad Armor,28
+ID,Name,Value,Description
+1000,Wood Armor,10,8
+1001,Crocodile Skin Armor,12,9
+1002,Chainmail,40,13
+1003,Iron Armor,68,20
+1004,Myamean Armor,75,22
+1005,Ever-Glad Armor,85,28

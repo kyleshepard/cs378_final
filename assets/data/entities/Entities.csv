@@ -1,7 +1,7 @@
 ID,Name,Value,Description,Damage
 2000,Particularly Sharp Stick,2,Pointy Stick. Good for stabbing,5
 2001,Knife,22,,13
-2002,Shortsword,38,,18
+2002,Shortsword,38,",",18
 2003,Scimitar,62,,24
 2004,Myamean Greatsword,85,,35
 2005,Ever-Blade,100,,44

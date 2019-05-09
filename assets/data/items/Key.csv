@@ -1,7 +1,3 @@
-ID,Name
-3000,Door Key 1
-3001,
-3002,
-3003,
-3004,
-3005,
+ID,Name,Value,Description
+3000,Gate Key,15,Key to Gate of the Village of Jaxon
+3001,House Key,0,Key to some guy's house
