@@ -189,6 +189,10 @@ public class CS378 extends KeyAdapter{
 		sheriff.setBounds(0.6, 0.6, 1.0 / 28.4, 1.0 / 8.0);
 		UIPanel.add(sheriff);
 		
+		ClickableObject Goblin = new ClickableObject(new Enemy("Goblin",100,20));
+		Goblin.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/goblin.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
+		Goblin.setBounds(0.3, 0.5, 1.0 / 20.4, 1.0 / 8.0);
+		UIPanel.add(Goblin);
 		
 		player.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/player.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
 		player.setBounds(0.4, 0.4, 1.0 / 28.4, 1.0 / 8.0);

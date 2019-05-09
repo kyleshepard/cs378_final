@@ -32,6 +32,14 @@ public class Player extends Entity{
 		questList.add(crap);
 	}
 	
+	public static Quest getQuest(int questID) {
+		for(Quest q : questList) {
+			if (q.getID() == questID)
+				return q;
+		}
+		return null;
+	}
+	
 	public static void deleteQuest(Quest crap) {
 		questList.remove(crap);
 	}
