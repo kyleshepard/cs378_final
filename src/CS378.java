@@ -1,10 +1,14 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.*;
+
 
 public class CS378 extends KeyAdapter{
 		//default game resolutions
@@ -28,6 +32,7 @@ public class CS378 extends KeyAdapter{
 	private static JLabel backgroundLabel = new JLabel();
 	private static UIObject healthUI = new UIObject();
 	private static UIObject compassUI = new UIObject();
+	private static Map<Integer, Room> gameMap = new HashMap<>();
 	
 		//used for keeping track of player and movement of player
 	public static Player p = new Player("Kyle Jay",100,12);
@@ -35,7 +40,7 @@ public class CS378 extends KeyAdapter{
 	public static Point playerDest = new Point(player.getLocation());
 
 		//test room stuff
-	static Room currentRoom = new Room("Cool City","DemoRoom2.png", 57, 0, 0, 0, 0);
+	static Room currentRoom = new Room("Cool_City","DemoRoom2.png", 57, 0, 0, 0, 0);
 	
 	/**
 	 * Launch the application.
@@ -44,7 +49,7 @@ public class CS378 extends KeyAdapter{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				
-				ScheduledExecutorService scheduledPool = Executors.newScheduledThreadPool(2);
+				ScheduledExecutorService scheduledPool = Executors.newScheduledThreadPool(3);
 				
 				try {
 					CS378 window = new CS378();
@@ -70,6 +75,36 @@ public class CS378 extends KeyAdapter{
 					}
 				};
 				
+				Runnable updateEntityLocations = new Runnable() {
+					@Override
+					public void run() {
+							//calculate distance between player and destination
+						for ( ClickableObject i : currentRoom.getObjects()) {
+							
+							//double diffX = playerDest.getX() - player.getX();
+							//double diffY = playerDest.getY() - player.getY();
+							double diffX = -(i.getX());
+							double diffY = -(i.getY());
+							
+							if (i.getObject() instanceof Enemy) {
+								diffX += (player.getX() + player.getWidth()/2);
+								diffY += (player.getY() + player.getHeight()/2);
+							}
+							
+							if(Math.hypot(diffX, diffY) > i.getWidth() / 2) {
+								p.setHasDestination(true);
+							}
+						}
+						
+						
+							//only bother moving if the player isn't already there
+						
+							//moves player towards destination if member variable hasDestination is true
+						player.setLocation(player.updateLocation(new Point(player.getLocation()),playerDest));
+						
+					}
+				};
+				
 				Runnable redraw = new Runnable() {	//quite possibly useless, but were gonna leave it anyway
 					@Override
 					public void run() {
@@ -80,6 +115,7 @@ public class CS378 extends KeyAdapter{
 				
 					//launch all threads 60 times a second as dictated by variable "framerate"
 				scheduledPool.scheduleWithFixedDelay(updatePlayerLocation, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
+				scheduledPool.scheduleWithFixedDelay(updateEntityLocations, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				scheduledPool.scheduleWithFixedDelay(redraw, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				
 			}
@@ -100,7 +136,7 @@ public class CS378 extends KeyAdapter{
 			//create window
 		frame = new JFrame();
 		frame.setResizable(false);
-		frame.setTitle("Untitled");
+		frame.setTitle("Florida Simulator");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		if(fullscreen) {
@@ -120,7 +156,7 @@ public class CS378 extends KeyAdapter{
 		background.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 			//background using JLabel to hold image
-		backgroundLabel = new JLabel(resizeIcon(new ImageIcon(curdir + "/assets/testbkg.jpg"),Res.x,Res.y));
+		backgroundLabel = new JLabel(resizeIcon(new ImageIcon(curdir + "/assets/sprites/testbkg.jpg"),Res.x,Res.y));
 		backgroundLabel = new JLabel(resizeIcon(new ImageIcon(curdir + "/assets/sprites/" + currentRoom.getBackground()),Res.x,Res.y));
 		background.add(backgroundLabel);
 		
@@ -134,17 +170,17 @@ public class CS378 extends KeyAdapter{
 		
 			//define UI elements
 				//HP monitor
-		healthUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/uielements/heart.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
+		healthUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/heart.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
 		healthUI.setBounds(0.05, 6.8 / 8.0, 1.0 / 14.2, 1.0 / 8.0);
 		UIPanel.add(healthUI);
 				//Compass for navigation
-		compassUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/uielements/compassrose.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
+		compassUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/uielements/sprites/compassrose.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
 		compassUI.setBounds((Res.x / 2) - ((int)(Res.y/8.0) / 2), (int)(6.8 * Res.y / 8.0), (int)(Res.y/8.0), (int)(Res.y/8.0));
 		UIPanel.add(compassUI);
 		
 		//test code
 		ClickableObject heart = new ClickableObject(new Item("heart","issa heart",5,789));
-		heart.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/uielements/heart.png"),(int)(Res.y/16.0), (int)(Res.y/16.0)));
+		heart.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/heart.png"),(int)(Res.y/16.0), (int)(Res.y/16.0)));
 		heart.setBounds(0.5, 0.5, 1.0 / 14.2, 1.0 / 8.0);
 		UIPanel.add(heart);
 		
@@ -185,9 +221,9 @@ public class CS378 extends KeyAdapter{
 		return new ImageIcon(img); 
 	}
 	
-	static void loadRoom() {
+	static void loadRoom(int ID) {
 		//unload assets of current room
-		//load new assets (currentRoom = whatever);
+		//load new assets (currentRoom = whatever(ID));
 	}
 	
 	private static void quitGame() {
