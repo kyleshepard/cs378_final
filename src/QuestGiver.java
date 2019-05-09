@@ -11,6 +11,7 @@ public class QuestGiver extends Entity{
 	public void giveQuest(Quest item){
 	Player.addQuest(item);
 	}
+	
 	public void RemoveQuest(Quest item) {
 		Player.deleteQuest(item);
 	}
