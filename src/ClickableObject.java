@@ -52,6 +52,10 @@ public class ClickableObject extends UIObject {
 		});	
 	}
 	
+	public ClickableObject() {
+		super();
+	}
+	
 	int getID() { return ID; }
 	
 	public Point updateLocation(Point p1, Point p2) {

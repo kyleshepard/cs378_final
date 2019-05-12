@@ -38,6 +38,7 @@ public class CS378 extends KeyAdapter{
 	
 	private static UIObject healthUI = new UIObject();
 	private static UIObject compassUI = new UIObject();
+	private static ClickableObject pause = new ClickableObject();
 	private static Map<Integer, Room> gameMap = new HashMap<>();				//map ID's to Room objects
 	private static Map<Integer, ClickableObject> gameObjects = new HashMap<>();	//map ID's to all types of ClickableObjects
 	
@@ -219,9 +220,13 @@ public class CS378 extends KeyAdapter{
 		healthUI.setBounds(0.05, 6.8 / 8.0, 1.0 / 14.2, 1.0 / 8.0);
 		UIPanel.add(healthUI);
 				//Compass for navigation
-		compassUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/uielements/sprites/compassrose.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
+		compassUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/compassrose.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
 		compassUI.setBounds((Res.x / 2) - ((int)(Res.y/8.0) / 2), (int)(6.8 * Res.y / 8.0), (int)(Res.y/8.0), (int)(Res.y/8.0));
 		UIPanel.add(compassUI);
+		
+		pause.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/pause.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
+		pause.setBounds(0.02, 0.05, 1.0 / 14.2, 1.0 / 8.0);
+		UIPanel.add(pause);
 		
 		//test code
 		ClickableObject heart = new ClickableObject(new Item(1000,"heart",5,"issa heart"));
