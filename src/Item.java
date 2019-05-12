@@ -11,7 +11,7 @@ public class Item implements Clickable{
 		
 	}
 	
-	public Item( int ID, String name, int value, String description ) {
+	public Item(int ID, String name, int value, String description) {
 		this.ID = ID;
 		this.name = name;
 		this.value = value;

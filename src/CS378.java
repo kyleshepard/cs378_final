@@ -27,12 +27,19 @@ public class CS378 extends KeyAdapter{
 	
 	private static JFrame frame;
 	private static JLayeredPane layeredPane = new JLayeredPane();
+	public static JPanel menu = new JPanel();
 	private static JPanel background = new JPanel();
 	private static JPanel UIPanel = new JPanel();
 	private static JLabel backgroundLabel = new JLabel();
+	
+	
+	private static Menu mainMenu = new Menu();
+	private static Menu pauseMenu = new Menu();
+	
 	private static UIObject healthUI = new UIObject();
 	private static UIObject compassUI = new UIObject();
-	private static Map<Integer, Room> gameMap = new HashMap<>();
+	private static Map<Integer, Room> gameMap = new HashMap<>();				//map ID's to Room objects
+	private static Map<Integer, ClickableObject> gameObjects = new HashMap<>();	//map ID's to all types of ClickableObjects
 	
 		//used for keeping track of player and movement of player
 	public static Player p = new Player("Kyle Jay",100,12);
@@ -50,7 +57,7 @@ public class CS378 extends KeyAdapter{
 			public void run() {
 				
 				ScheduledExecutorService scheduledPool = Executors.newScheduledThreadPool(3);
-				
+
 				try {
 					CS378 window = new CS378();
 					window.frame.setVisible(true);
@@ -105,18 +112,43 @@ public class CS378 extends KeyAdapter{
 					}
 				};
 				
-				Runnable redraw = new Runnable() {	//quite possibly useless, but were gonna leave it anyway
+				Runnable menuDisplay = new Runnable() {
 					@Override
 					public void run() {
-						frame.revalidate();
-						frame.repaint();
+						if (mainMenu.getEnabled() == true) {
+							
+							//System.out.println(mainMenu.getChoice());
+							
+							menu.setVisible(true);
+							mainMenu.drawMenu();
+							int choice = mainMenu.getChoice();
+							if(choice == 1) {
+								System.out.println("start!");
+								UIPanel.setVisible(true);
+								background.setVisible(true);
+								menu.setVisible(false);
+								mainMenu.setEnabled(false);
+								loadControls();
+							}
+							else if (choice == 2) {
+								System.out.println("load!");
+							}
+							else if (choice == 3) {
+								System.out.println("exit!");
+								quitGame();
+							}
+							
+						}
+						if(pauseMenu.getEnabled() == true) {
+							
+						}
 					}
 				};
 				
 					//launch all threads 60 times a second as dictated by variable "framerate"
 				scheduledPool.scheduleWithFixedDelay(updatePlayerLocation, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				scheduledPool.scheduleWithFixedDelay(updateEntityLocations, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
-				scheduledPool.scheduleWithFixedDelay(redraw, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
+				scheduledPool.scheduleWithFixedDelay(menuDisplay, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				
 			}
 		});
@@ -147,6 +179,19 @@ public class CS378 extends KeyAdapter{
 		
 		layeredPane.setPreferredSize(new Dimension(Res.x, Res.y));
 		frame.getContentPane().add(layeredPane, BorderLayout.NORTH);
+		
+		
+		String[] mm = {"Start","Load","Exit Game"};
+		mainMenu = new Menu(mm);
+		String[] pm = {"Save","Load","Exit"};
+		pauseMenu = new Menu(pm);
+		
+		
+		layeredPane.setLayer(menu, 2);
+		menu.setBounds(0, 0, Res.x, Res.y);
+		layeredPane.add(menu);
+		menu.setLayout(null);
+		menu.setBackground(new Color(33,33,33));
 		
 			//panel for displaying background image
 		
@@ -194,6 +239,7 @@ public class CS378 extends KeyAdapter{
 		Goblin.setBounds(0.3, 0.5, 1.0 / 20.4, 1.0 / 8.0);
 		UIPanel.add(Goblin);
 		
+		
 		player.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/player.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
 		player.setBounds(0.4, 0.4, 1.0 / 28.4, 1.0 / 8.0);
 		UIPanel.add(player);
@@ -205,17 +251,32 @@ public class CS378 extends KeyAdapter{
 				playerDest.setLocation(new Point(e.getX() - player.getWidth()/2, e.getY() - player.getHeight()/2));			}
 		});
 			//temporary solution to exit game by pressing the '1' key
-		Action quit= new AbstractAction() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				quitGame();
-			}
-		};
-		UIPanel.getInputMap().put(KeyStroke.getKeyStroke("1"),"pressed1");
-		UIPanel.getActionMap().put("pressed1",quit);
+		//loadControls();
+		
+		
+		//panels are disabled until activated via menu navigation
+		//menu.setVisible(false);
+		UIPanel.setVisible(false);
+		background.setVisible(false);
+		
+		mainMenu.setEnabled(true);
 		
 		frame.pack();
+	}
+	
+	static Action quit= new AbstractAction() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			quitGame();
+		}
+	};
+	
+	static void loadControls() {
+		
+		UIPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('W'),"pressedW");
+		UIPanel.getActionMap().put("pressedW",quit);
+		//System.out.println(UIPanel.getInputMap().allKeys()); //prints null ???
 	}
 	
 		//method resizeIcon takes ImageIcon object and preferred size and scales it using smooth scaling

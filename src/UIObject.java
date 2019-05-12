@@ -8,6 +8,10 @@ public class UIObject extends JLabel{
 		super();
 	}
 	
+	public UIObject(String text) {
+		super(text);
+	}
+	
 	//used for setting bounds of UI elements using ratios in relation to the resolution of the game window
 	public void setBounds(double xPosMulti, double yPosMult, double widthMult, double heightMult) {
 		super.setBounds((int)(Res.x * xPosMulti),(int)(Res.y * yPosMult), (int)(Res.x * widthMult),(int)(Res.y * heightMult));

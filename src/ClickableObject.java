@@ -7,6 +7,7 @@ public class ClickableObject extends UIObject {
 	private static final long serialVersionUID = 5537929707578305439L;
 	protected Clickable obj;
 	protected int ID;
+	protected boolean clicked;
 	
 	public ClickableObject(Clickable obj) {
 		super();
@@ -40,10 +41,24 @@ public class ClickableObject extends UIObject {
 		
 	}
 	
+	public ClickableObject(String text, int ID) {	//used for main menu and pause menu labels
+		super(text);
+		clicked = false;
+		this.ID = ID;
+		addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				clicked = true;
+			}
+		});	
+	}
+	
+	int getID() { return ID; }
 	
 	public Point updateLocation(Point p1, Point p2) {
 		return obj.updateLocation(p1, p2);
 	}
 	public Clickable getObject() { return obj;}
-	
+	public boolean getClicked() { return clicked; }
+
+	public void setClicked(boolean clicked) { this.clicked = clicked; }
 }
