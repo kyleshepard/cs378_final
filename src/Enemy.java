@@ -26,6 +26,7 @@ public class Enemy extends Entity{
 			if(Player.getQuest(123) instanceof KillQuest) {
 				if(((KillQuest)Player.getQuest(123)).NumberToKill != 0) {
 					((KillQuest)Player.getQuest(123)).NumberToKill--;
+					System.out.println("Goblin Killed!");
 				}
 				
 				else {
