@@ -19,6 +19,10 @@ public class QuestGiver extends Entity{
 	
 	@Override
 	public void onClick(){
+		CS378.DialogueBox.setEnabled(true);
+		
+		
+		
 	}
 	
 	

@@ -10,6 +10,6 @@ public class KillQuest extends Quest {
 		//EnemyToKill = Enemy.getEnemyType("Goblin");
 		reward = new Weapon("Axe of Goblin Bones", "Made from Goblin Bones", 1234, 100, 10);
 		
-	}	
+	}
 	
 }

@@ -29,8 +29,9 @@ public class CS378 extends KeyAdapter{
 	private static JLayeredPane layeredPane = new JLayeredPane();
 	public static JPanel menu = new JPanel();
 	private static JPanel background = new JPanel();
-	private static JPanel UIPanel = new JPanel();
+	public static JPanel UIPanel = new JPanel();
 	private static JLabel backgroundLabel = new JLabel();
+	public static JPanel DialogueBox = new JPanel();
 	
 	
 	private static Menu mainMenu = new Menu();
@@ -142,6 +143,24 @@ public class CS378 extends KeyAdapter{
 						}
 						if(pauseMenu.getEnabled() == true) {
 							
+						}
+						if (DialogueBox.getEnabled() == true) {
+							DialogueBox.setVisible(true);
+							int choice = DialogueBox.getChoice();
+							if(choice == 1) {
+								System.out.println("Would you kindly kill some goblins?");
+								Player.addQuest(new KillQuest());
+								DialogueBox.setVisible(false);
+							}
+							if(choice == 2) {
+								System.out.println("Fuck those goblins up");
+								Player.addQuest(new KillQuest());
+								DialogueBox.setVisible(false);
+							}
+							if(choice == 3) {
+								System.out.println("I fucking hate you");
+								DialogueBox.setVisible(false);
+							}
 						}
 					}
 				};
