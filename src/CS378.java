@@ -14,9 +14,9 @@ public class CS378 extends KeyAdapter{
 		//default game resolutions
 	public static int[] xRes = {1920, 1366, 1280, 1024};
 	public static int[] yRes = {1080, 768, 720, 576};
-	public static int res = 3;
+	public static int res = 1;
 	Res r = new Res(xRes[res], yRes[res]);
-	private static boolean fullscreen = false;
+	private static boolean fullscreen = true;
 	
 		//variables used for maintaining game speed
 	final static double frameRate = 60.0;
@@ -31,15 +31,15 @@ public class CS378 extends KeyAdapter{
 	private static JPanel background = new JPanel();
 	public static JPanel UIPanel = new JPanel();
 	private static JLabel backgroundLabel = new JLabel();
-	public static JPanel DialogueBox = new JPanel();
 	
 	
+	public static Menu DialogueBox = new Menu();
 	private static Menu mainMenu = new Menu();
 	private static Menu pauseMenu = new Menu();
 	
 	private static UIObject healthUI = new UIObject();
 	private static UIObject compassUI = new UIObject();
-	private static ClickableObject pause = new ClickableObject();
+	private static ClickableObject pause = new ClickableObject("");
 	private static Map<Integer, Room> gameMap = new HashMap<>();				//map ID's to Room objects
 	private static Map<Integer, ClickableObject> gameObjects = new HashMap<>();	//map ID's to all types of ClickableObjects
 	
@@ -117,9 +117,11 @@ public class CS378 extends KeyAdapter{
 				Runnable menuDisplay = new Runnable() {
 					@Override
 					public void run() {
-						if(pause.getClicked())
+						if(pause.getClicked()) {
 							pauseMenu.setEnabled(true);
-						if (mainMenu.getEnabled() == true) {
+							pause.setClicked(false);
+						}
+						if (mainMenu.getEnabled()) {
 							
 							//System.out.println(mainMenu.getChoice());
 							
@@ -133,6 +135,7 @@ public class CS378 extends KeyAdapter{
 								menu.setVisible(false);
 								mainMenu.setEnabled(false);
 								loadControls();
+								menu.removeAll();
 							}
 							else if (choice == 2) {
 								System.out.println("load!");
@@ -143,30 +146,46 @@ public class CS378 extends KeyAdapter{
 							}
 							
 						}
-						if(pauseMenu.getEnabled() == true) {
+						if(pauseMenu.getEnabled()) {
+							//System.out.println("yes");
 							menu.setVisible(true);
-							menu.removeAll();
 							pauseMenu.drawMenu();
 							int choice = pauseMenu.getChoice();
-							if (choice == 1)
-								System.out.println("yeet");
+							if (choice == 1) {
+								menu.removeAll();
+								menu.setVisible(false);
+								pauseMenu.setEnabled(false);
+							}
+							else if (choice == 2) {
+								System.out.println("Save!");
+							}
+							else if (choice == 3) {
+								System.out.println("Load!");
+							}
+							else if (choice == 4) {
+								quitGame();
+							}
+							
 						}
-						if (DialogueBox.getEnabled() == true) {
-							DialogueBox.setVisible(true);
+						if (DialogueBox.getEnabled()) {
+							menu.setVisible(true);
+							DialogueBox.drawMenu();
 							int choice = DialogueBox.getChoice();
 							if(choice == 1) {
-								System.out.println("Would you kindly kill some goblins?");
+								//System.out.println("Would you kindly kill some goblins?");
 								Player.addQuest(new KillQuest());
-								DialogueBox.setVisible(false);
+								menu.setVisible(false);
+								DialogueBox.setEnabled(false);
 							}
-							if(choice == 2) {
-								System.out.println("Fuck those goblins up");
-								Player.addQuest(new KillQuest());
-								DialogueBox.setVisible(false);
+							else if(choice == 2) {
+								//System.out.println("Kill those boyos");
+								//Player.addQuest(new KillQuest());
+								menu.setVisible(false);
+								DialogueBox.setEnabled(false);
 							}
-							if(choice == 3) {
-								System.out.println("I fucking hate you");
-								DialogueBox.setVisible(false);
+							else if(choice == 3) {
+								//System.out.println("nah" );
+								menu.setVisible(false);
 							}
 						}
 					}
@@ -209,9 +228,10 @@ public class CS378 extends KeyAdapter{
 		
 		String[] mm = {"Start","Load","Exit Game"};
 		mainMenu = new Menu(mm);
-		String[] pm = {"Save","Load","Exit"};
+		String[] pm = {"Resume","Save","Load","Exit"};
 		pauseMenu = new Menu(pm);
-		
+		String[] gq = {"Accept","Decline"};
+		DialogueBox = new Menu(gq);
 		
 		layeredPane.setLayer(menu, 2);
 		menu.setBounds(0, 0, Res.x, Res.y);
@@ -256,29 +276,31 @@ public class CS378 extends KeyAdapter{
 		//test code
 		ClickableObject heart = new ClickableObject(new Item(1000,"heart",5,"issa heart"));
 		heart.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/heart.png"),(int)(Res.y/16.0), (int)(Res.y/16.0)));
-		heart.setBounds(0.5, 0.5, 1.0 / 14.2, 1.0 / 8.0);
+		heart.setBounds(0.9, 0.5, 1.0 / 14.2, 1.0 / 8.0);
 		UIPanel.add(heart);
 		
 		ClickableObject sheriff = new ClickableObject(new QuestGiver("Sheriff",100,20));
 		sheriff.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/sheriff.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
-		sheriff.setBounds(0.6, 0.6, 1.0 / 28.4, 1.0 / 8.0);
+		sheriff.setBounds(0.88, 0.86, 1.0 / 28.4, 1.0 / 8.0);
 		UIPanel.add(sheriff);
 		
 		ClickableObject Goblin = new ClickableObject(new Enemy("Goblin",100,20));
 		Goblin.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/goblin.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
-		Goblin.setBounds(0.3, 0.5, 1.0 / 20.4, 1.0 / 8.0);
+		Goblin.setBounds(0.95, 0.1, 1.0 / 20.4, 1.0 / 8.0);
 		UIPanel.add(Goblin);
 		
 		
 		player.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/player.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
-		player.setBounds(0.4, 0.4, 1.0 / 28.4, 1.0 / 8.0);
+		player.setBounds(0.75, 0.4, 1.0 / 28.4, 1.0 / 8.0);
 		UIPanel.add(player);
 		playerDest = player.getLocation();
 		
 			//mouse click listener to set destinations for player to go to
 		UIPanel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				playerDest.setLocation(new Point(e.getX() - player.getWidth()/2, e.getY() - player.getHeight()/2));			}
+				playerDest.setLocation(new Point(e.getX() - player.getWidth()/2, e.getY() - player.getHeight()/2));
+				//System.out.println("(" + ((float)e.getX() / (float)Res.x) + "," + ((float)e.getY() / (float)Res.y) + ")");
+			}
 		});
 			//temporary solution to exit game by pressing the '1' key
 		//loadControls();
