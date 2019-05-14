@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
@@ -23,7 +24,7 @@ import javax.swing.SwingConstants;
 public class Menu {
 	private boolean enabled;
 	private int choice;	//0 means no choice (choice = index + 1)
-	private ClickableObject[] choices = {new ClickableObject("",0)};
+	private ClickableObject[] choices = {new ClickableObject("")};
 	
 	Menu(){
 		choice = 0;
@@ -32,7 +33,7 @@ public class Menu {
 	Menu(String[] options){
 		choices = new ClickableObject[options.length];
 		for (int i = 0; i < options.length; i++) {
-			choices[i] = new ClickableObject(options[i],i);
+			choices[i] = new ClickableObject(options[i]);
 		}
 	}
 	
@@ -42,17 +43,26 @@ public class Menu {
 	 * @param panel
 	 */
 	public void drawMenu() {
-		
+		CS378.menu.removeAll();
 		// Setup the JLabels that hold the menu selection choices. This
 		// is based upon the values found in the selectionText array.
 		// The default option is START GAME which is always at index 0.
+		 
+		Image img = new ImageIcon(CS378.curdir + "/assets/sprites/uielements/FloridaSim2.png").getImage();
+		img = img.getScaledInstance(Res.y/2, Res.y/4,  java.awt.Image.SCALE_SMOOTH);
+		JLabel title = new JLabel(new ImageIcon(img));
+		title.setSize(Res.y/2, Res.y/4);
+		title.setBounds(Res.x/2 - title.getWidth()/2, Res.y/ 16, title.getWidth(), title.getHeight());
+		
+		CS378.menu.add(title);
+		
 		for(int i = 0; i < choices.length; i++) {
 			ClickableObject l = choices[i];
 			
 			l.setForeground(Color.white);
 			l.setFont(new Font("Dialog", Font.PLAIN, (int)Res.y/25));
-			l.setBorder(BorderFactory.createLineBorder(Color.gray,1));
-			l.setBounds(Res.x / 32, Res.y/4 + (i * Res.y / 12), Res.x/4 - Res.x/16, Res.y/20);
+			l.setBounds(Res.x / 2 - Res.x/8 , Res.y/2 + (i * Res.y / 12), Res.x/4, Res.y/20);
+			l.setHorizontalAlignment(SwingConstants.CENTER);
 			CS378.menu.add(l);
 			choices[i] = l;
 		}

@@ -48,7 +48,7 @@ public class CS378 extends KeyAdapter{
 	public static Point playerDest = new Point(player.getLocation());
 
 		//test room stuff
-	static Room currentRoom = new Room(57,"Cool City","DemoRoom2.png", 0, 0, 0, 0);
+	static Room currentRoom = new Room(57,"Cool City","beach.png", 0, 0, 0, 0);
 	
 	/**
 	 * Launch the application.
@@ -116,6 +116,8 @@ public class CS378 extends KeyAdapter{
 				Runnable menuDisplay = new Runnable() {
 					@Override
 					public void run() {
+						if(pause.getClicked())
+							pauseMenu.setEnabled(true);
 						if (mainMenu.getEnabled() == true) {
 							
 							//System.out.println(mainMenu.getChoice());
@@ -141,7 +143,12 @@ public class CS378 extends KeyAdapter{
 							
 						}
 						if(pauseMenu.getEnabled() == true) {
-							
+							menu.setVisible(true);
+							menu.removeAll();
+							pauseMenu.drawMenu();
+							int choice = pauseMenu.getChoice();
+							if (choice == 1)
+								System.out.println("yeet");
 						}
 					}
 				};
@@ -181,7 +188,6 @@ public class CS378 extends KeyAdapter{
 		layeredPane.setPreferredSize(new Dimension(Res.x, Res.y));
 		frame.getContentPane().add(layeredPane, BorderLayout.NORTH);
 		
-		
 		String[] mm = {"Start","Load","Exit Game"};
 		mainMenu = new Menu(mm);
 		String[] pm = {"Save","Load","Exit"};
@@ -192,7 +198,7 @@ public class CS378 extends KeyAdapter{
 		menu.setBounds(0, 0, Res.x, Res.y);
 		layeredPane.add(menu);
 		menu.setLayout(null);
-		menu.setBackground(new Color(33,33,33));
+		menu.setBackground(new Color(20,80,60));
 		
 			//panel for displaying background image
 		
@@ -203,7 +209,7 @@ public class CS378 extends KeyAdapter{
 		
 			//background using JLabel to hold image
 		backgroundLabel = new JLabel(resizeIcon(new ImageIcon(curdir + "/assets/sprites/testbkg.jpg"),Res.x,Res.y));
-		backgroundLabel = new JLabel(resizeIcon(new ImageIcon(curdir + "/assets/sprites/" + currentRoom.getBackground()),Res.x,Res.y));
+		backgroundLabel = new JLabel(resizeIcon(new ImageIcon(curdir + "/assets/sprites/Rooms/" + currentRoom.getBackground()),Res.x,Res.y));
 		background.add(backgroundLabel);
 		
 			//interactive panel for user interface (health, inventory, navigation, clickableObjects, etc)

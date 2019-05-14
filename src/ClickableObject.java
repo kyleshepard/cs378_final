@@ -41,10 +41,9 @@ public class ClickableObject extends UIObject {
 		
 	}
 	
-	public ClickableObject(String text, int ID) {	//used for main menu and pause menu labels
+	public ClickableObject(String text) {	//used for main menu and pause menu labels
 		super(text);
 		clicked = false;
-		this.ID = ID;
 		addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				clicked = true;
