@@ -9,6 +9,7 @@ public class Room implements java.io.Serializable{
 	protected String background;
 	protected boolean firstVisit;
 	protected Vector<ClickableObject> objects = new Vector<>();
+	protected Vector<ClickableObject> initialState = new Vector<>();
 	
 	public Room() {
 		
@@ -39,7 +40,8 @@ public class Room implements java.io.Serializable{
 	}
 	
 	void firstTimeSetup() {	//evoked when room is loaded and firstVisit == true;
-		//search for ID value in Rooms.csv and load initial object conditions (i.e. Entities, Items, Doors, etc.)
+		//load initial object conditions (i.e. Entities, Items, Doors, etc.)
+		objects = initialState;
 		firstVisit = false;
 	}
 	

@@ -7,8 +7,8 @@ public class Armor extends Item{
 		
 	}
 	
-	public Armor(int ID, String name, int value, String description, int damageThreshold) {
-		super(ID, name, value, description);
+	public Armor(int ID, String name, int value, String description, int damageThreshold, String sprite) {
+		super(ID, name, value, description, sprite);
 		this.damageThreshold = damageThreshold;
 	}
 	

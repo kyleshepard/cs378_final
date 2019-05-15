@@ -14,9 +14,9 @@ public class CS378 extends KeyAdapter{
 		//default game resolutions
 	public static int[] xRes = {1920, 1366, 1280, 1024};
 	public static int[] yRes = {1080, 768, 720, 576};
-	public static int res = 1;
+	public static int res = 3;
 	Res r = new Res(xRes[res], yRes[res]);
-	private static boolean fullscreen = true;
+	private static boolean fullscreen = false;
 	
 		//variables used for maintaining game speed
 	final static double frameRate = 60.0;
@@ -30,6 +30,7 @@ public class CS378 extends KeyAdapter{
 	public static JPanel menu = new JPanel();
 	private static JPanel background = new JPanel();
 	public static JPanel UIPanel = new JPanel();
+	public static JPanel gamePanel = new JPanel();	//implement later and separate from UIPanel
 	private static JLabel backgroundLabel = new JLabel();
 	
 	
@@ -88,48 +89,43 @@ public class CS378 extends KeyAdapter{
 					@Override
 					public void run() {
 							//calculate distance between player and destination
-						for ( ClickableObject i : currentRoom.getObjects()) {
+						for ( Component i : UIPanel.getComponents()) {
 							
 							//double diffX = playerDest.getX() - player.getX();
 							//double diffY = playerDest.getY() - player.getY();
 							double diffX = -(i.getX());
 							double diffY = -(i.getY());
 							
-							if (i.getObject() instanceof Enemy) {
+							if (((ClickableObject)i).getObject() instanceof Enemy) {
 								diffX += (player.getX() + player.getWidth()/2);
 								diffY += (player.getY() + player.getHeight()/2);
 							}
 							
 							if(Math.hypot(diffX, diffY) > i.getWidth() / 2) {
-								p.setHasDestination(true);
+								//((ClickableObject)i).getObject().setHasDestination(true);
 							}
 						}
-						
-						
-							//only bother moving if the player isn't already there
-						
-							//moves player towards destination if member variable hasDestination is true
-						player.setLocation(player.updateLocation(new Point(player.getLocation()),playerDest));
-						
 					}
 				};
 				
-				Runnable menuDisplay = new Runnable() {
+				Runnable menuDisplay = new Runnable() {	//checks conditions for whether or not to display menus
 					@Override
 					public void run() {
+						
 						if(pause.getClicked()) {
+							
 							pauseMenu.setEnabled(true);
 							pause.setClicked(false);
 						}
 						if (mainMenu.getEnabled()) {
 							
-							//System.out.println(mainMenu.getChoice());
-							
 							menu.setVisible(true);
 							mainMenu.drawMenu();
 							int choice = mainMenu.getChoice();
+							
 							if(choice == 1) {
 								System.out.println("start!");
+								loadAssets(null);
 								UIPanel.setVisible(true);
 								background.setVisible(true);
 								menu.setVisible(false);
@@ -138,54 +134,61 @@ public class CS378 extends KeyAdapter{
 								menu.removeAll();
 							}
 							else if (choice == 2) {
+								
 								System.out.println("load!");
 							}
 							else if (choice == 3) {
+								
 								System.out.println("exit!");
 								quitGame();
 							}
-							
+
 						}
 						if(pauseMenu.getEnabled()) {
-							//System.out.println("yes");
+
 							menu.setVisible(true);
 							pauseMenu.drawMenu();
 							int choice = pauseMenu.getChoice();
+							
 							if (choice == 1) {
+								
 								menu.removeAll();
 								menu.setVisible(false);
 								pauseMenu.setEnabled(false);
 							}
 							else if (choice == 2) {
+								
 								System.out.println("Save!");
 							}
 							else if (choice == 3) {
+								
 								System.out.println("Load!");
 							}
 							else if (choice == 4) {
+								
 								quitGame();
 							}
 							
 						}
 						if (DialogueBox.getEnabled()) {
+							
 							menu.setVisible(true);
 							DialogueBox.drawMenu();
 							int choice = DialogueBox.getChoice();
+							
 							if(choice == 1) {
+								
 								//System.out.println("Would you kindly kill some goblins?");
 								Player.addQuest(new KillQuest());
 								menu.setVisible(false);
 								DialogueBox.setEnabled(false);
 							}
 							else if(choice == 2) {
+								
 								//System.out.println("Kill those boyos");
 								//Player.addQuest(new KillQuest());
 								menu.setVisible(false);
 								DialogueBox.setEnabled(false);
-							}
-							else if(choice == 3) {
-								//System.out.println("nah" );
-								menu.setVisible(false);
 							}
 						}
 					}
@@ -195,7 +198,6 @@ public class CS378 extends KeyAdapter{
 				scheduledPool.scheduleWithFixedDelay(updatePlayerLocation, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				scheduledPool.scheduleWithFixedDelay(updateEntityLocations, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
 				scheduledPool.scheduleWithFixedDelay(menuDisplay, 0, (int)skipTicks, TimeUnit.MILLISECONDS);
-				
 			}
 		});
 	}
@@ -207,6 +209,35 @@ public class CS378 extends KeyAdapter{
 		initialize();
 	}
 
+	static void loadAssets(Save save){
+		//if new game, load rooms from Rooms.csv. if loading save, load map from save file
+		//define FileReader, read in Rooms, put in map with ID being the key
+		//put group all ClickableObjects into items map, to always be loaded from csv files, as object states are kept track of by rooms
+		
+		if(save == null) {
+			System.out.println("rep");
+		}
+		else {
+			//load from save
+		}
+	}
+	
+	static void loadRoom(int ID) {
+		//check if room to load exists before unloading
+		if(gameMap.get(ID) != null) {
+		
+		}
+		//unload assets of current room
+		//load new assets (currentRoom = whatever(ID));
+	}
+	
+		//method resizeIcon takes ImageIcon object and preferred size and scales it using smooth scaling
+	static ImageIcon resizeIcon(ImageIcon icon, int xSize, int ySize) {
+		Image img = icon.getImage();
+		img = img.getScaledInstance(xSize, ySize,  java.awt.Image.SCALE_SMOOTH);
+		return new ImageIcon(img); 
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -218,15 +249,15 @@ public class CS378 extends KeyAdapter{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		if(fullscreen) {
+			
 			frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 			frame.setUndecorated(true);
 		}
 		
-		
 		layeredPane.setPreferredSize(new Dimension(Res.x, Res.y));
 		frame.getContentPane().add(layeredPane, BorderLayout.NORTH);
 		
-		String[] mm = {"Start","Load","Exit Game"};
+		String[] mm = {"New","Load","Exit Game"};
 		mainMenu = new Menu(mm);
 		String[] pm = {"Resume","Save","Load","Exit"};
 		pauseMenu = new Menu(pm);
@@ -240,7 +271,6 @@ public class CS378 extends KeyAdapter{
 		menu.setBackground(new Color(20,80,60));
 		
 			//panel for displaying background image
-		
 		layeredPane.add(background);
 		background.setBounds(0, 0, Res.x, Res.y);
 		background.setBackground(new Color(33,33,33));
@@ -252,7 +282,6 @@ public class CS378 extends KeyAdapter{
 		background.add(backgroundLabel);
 		
 			//interactive panel for user interface (health, inventory, navigation, clickableObjects, etc)
-		
 		UIPanel.setOpaque(false);
 		layeredPane.setLayer(UIPanel, 1);
 		UIPanel.setBounds(0, 0, Res.x, Res.y);
@@ -274,7 +303,7 @@ public class CS378 extends KeyAdapter{
 		UIPanel.add(pause);
 		
 		//test code
-		ClickableObject heart = new ClickableObject(new Item(1000,"heart",5,"issa heart"));
+		ClickableObject heart = new ClickableObject(new Item(1000,"heart",5,"issa heart",""));
 		heart.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/heart.png"),(int)(Res.y/16.0), (int)(Res.y/16.0)));
 		heart.setBounds(0.9, 0.5, 1.0 / 14.2, 1.0 / 8.0);
 		UIPanel.add(heart);
@@ -289,7 +318,7 @@ public class CS378 extends KeyAdapter{
 		Goblin.setBounds(0.95, 0.1, 1.0 / 20.4, 1.0 / 8.0);
 		UIPanel.add(Goblin);
 		
-		
+			//player
 		player.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/player.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
 		player.setBounds(0.75, 0.4, 1.0 / 28.4, 1.0 / 8.0);
 		UIPanel.add(player);
@@ -304,7 +333,6 @@ public class CS378 extends KeyAdapter{
 		});
 			//temporary solution to exit game by pressing the '1' key
 		//loadControls();
-		
 		
 		//panels are disabled until activated via menu navigation
 		//menu.setVisible(false);
@@ -331,18 +359,7 @@ public class CS378 extends KeyAdapter{
 		//System.out.println(UIPanel.getInputMap().allKeys()); //prints null ???
 	}
 	
-		//method resizeIcon takes ImageIcon object and preferred size and scales it using smooth scaling
-	static ImageIcon resizeIcon(ImageIcon icon, int xSize, int ySize) {
-		Image img = icon.getImage();
-		img = img.getScaledInstance(xSize, ySize,  java.awt.Image.SCALE_SMOOTH);
-		return new ImageIcon(img); 
-	}
-	
-	static void loadRoom(int ID) {
-		//unload assets of current room
-		//load new assets (currentRoom = whatever(ID));
-	}
-	
+
 	private static void quitGame() {
 		frame.setVisible(false);
 		frame.dispose();

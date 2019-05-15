@@ -5,8 +5,8 @@ public class Key extends Item{
 		
 	}
 	
-	public Key(int ID, String name, int value, String description) {
-		super(ID, name, value, description);
+	public Key(int ID, String name, int value, String description, String sprite) {
+		super(ID, name, value, description, sprite);
 
 	}
 	
