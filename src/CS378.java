@@ -16,7 +16,7 @@ public class CS378 extends KeyAdapter{
 	public static int[] yRes = {1080, 768, 720, 576};
 	public static int res = 1;
 	Res r = new Res(xRes[res], yRes[res]);
-	private static boolean fullscreen = true;
+	private static boolean fullscreen = false;
 	
 		//variables used for maintaining game speed
 	final static double frameRate = 60.0;
