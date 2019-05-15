@@ -12,8 +12,8 @@ public class Player extends Entity{
 		
 	}
 	
-	public Player(String name, int health, int strength /* ImageIcon _sprite */) {
-		super(name, health, strength /*, ImageIcon _sprite*/);
+	public Player(int ID, String name, int health, String sprite, int strength) {
+		super(ID, name, health, sprite, strength);
 		//initialize inventory
 	}
 	

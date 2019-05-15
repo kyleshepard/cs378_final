@@ -4,8 +4,8 @@ public class QuestGiver extends Entity{
 		
 	}
 	
-	public QuestGiver(String name, int health, int strength) {
-		super(name, health, strength);
+	public QuestGiver(int ID, String name, int health, String sprite, int strength) {
+		super(ID, name, health, sprite, strength);
 	}
 	
 	public void giveQuest(Quest item){

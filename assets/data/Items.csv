@@ -1,0 +1,18 @@
+ID,Name,Value,Description,Sprite,"Strength (damage,threshold,etc)"
+1000,Wooden Armor,10,pretty weak,wooden_armor.png,8
+1001,Crocodile Skin Armor,12,made of fricking crocs,crocodile_armor.png,9
+1002,Chainmail,40,chainmail,chainmail_armor.png,13
+1003,Iron Armor,68,iron armor,iron_armor.png,20
+1004,Myamean Armor,75,myamean greatsword,myamean_armor.png,22
+1005,Ever-Glad Armor,85,ever-glad armor,ever_glad_armor.png,28
+2000,Particularly Sharp Stick,2,Pointy Stick. Good for stabbing,stick.png,5
+2001,Knife,22,knife,knife.png,13
+2002,Shortsword,38,shortsword,shortsword.png,18
+2003,Scimitar,62,scimitar,scimitar.png,24
+2004,Myamean Greatsword,85,myamean greatsword,myamean_greatsword.png,35
+2005,Ever-Blade,100,ever-blade,ever_blade.png,44
+2006,Axe of Goblin Bones,25,axe of goblin bones,goblin_axe.png,16
+3000,Gate Key,15,Key to Gate of the Village of Jaxon,key.png,0
+3001,House Key,0,Key to some guy's house,key.png,0
+4000,Pensa-Cola,25,Replenishes 10 health,pensa_cola.png,10
+4001,Orange,15,Replenishes 5 health,orange.png,5

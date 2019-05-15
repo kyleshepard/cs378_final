@@ -5,12 +5,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.*;
 
 
-public class CS378 extends KeyAdapter{
+public class CS378{
 		//default game resolutions
 	public static int[] xRes = {1920, 1366, 1280, 1024};
 	public static int[] yRes = {1080, 768, 720, 576};
@@ -45,9 +51,10 @@ public class CS378 extends KeyAdapter{
 	private static Map<Integer, ClickableObject> gameObjects = new HashMap<>();	//map ID's to all types of ClickableObjects
 	
 		//used for keeping track of player and movement of player
-	public static Player p = new Player("Kyle Jay",100,12);
+	public static Player p = new Player(1,"Kyle Jay",100,"player",12);
 	public static ClickableObject player = new ClickableObject(p);
 	public static Point playerDest = new Point(player.getLocation());
+	static Save save1 = new Save();
 
 		//test room stuff
 	static Room currentRoom = new Room(57,"Cool City","beach.png", 0, 0, 0, 0);
@@ -125,7 +132,7 @@ public class CS378 extends KeyAdapter{
 							
 							if(choice == 1) {
 								System.out.println("start!");
-								loadAssets(null);
+								loadAssets(true);
 								UIPanel.setVisible(true);
 								background.setVisible(true);
 								menu.setVisible(false);
@@ -134,7 +141,7 @@ public class CS378 extends KeyAdapter{
 								menu.removeAll();
 							}
 							else if (choice == 2) {
-								
+								loadAssets(false);
 								System.out.println("load!");
 							}
 							else if (choice == 3) {
@@ -209,16 +216,111 @@ public class CS378 extends KeyAdapter{
 		initialize();
 	}
 
-	static void loadAssets(Save save){
+	static void loadAssets(boolean newGame){
 		//if new game, load rooms from Rooms.csv. if loading save, load map from save file
 		//define FileReader, read in Rooms, put in map with ID being the key
 		//put group all ClickableObjects into items map, to always be loaded from csv files, as object states are kept track of by rooms
 		
-		if(save == null) {
-			System.out.println("rep");
+		if(newGame) {
+			
+			File cd =  new File(curdir + "/assets/data/");
+	        File[] files = cd.listFiles();
+	        
+	        for (File f: files) {
+	        	
+	            if (f.getName().endsWith(".csv")) {		//we want csv files only
+	            	
+	            	String errorAt = "";
+	            	
+					try (FileInputStream is = new FileInputStream(f)) {
+			        	
+			            InputStreamReader ir = new InputStreamReader(is);
+			            BufferedReader rdr = new BufferedReader(ir);
+			            String line = rdr.readLine();
+			            line = rdr.readLine();
+		
+			            while (line != null) {
+			            	
+			            	Vector<String> segments = new Vector<>();		//we use a vector to store each piece of info because we don't know how many parameters to expect
+			                segments = new Vector<String>(Arrays.asList(line.split(",")));	//the vector is created with each element representing a single parameter
+			                
+			                int ID = Integer.parseInt(segments.elementAt(0));
+			                
+			                if(f.getName().contentEquals("Rooms.csv")) {	//prepare to add to game map
+			                	
+			                	//System.out.println(segments.elementAt(0));
+			                	
+			                }else {											//prepare to add to item map
+			                	errorAt = line;
+			                	String name = segments.get(1);
+			                	int value = 0;
+			                	String description = "";
+			                	String sprite = "";
+			                	int strength = 0;
+			                	int health = 0;
+			                	
+			                	
+			                	if(ID >= 1000 & ID <= 4999) {
+			                		value = Integer.parseInt(segments.get(2));
+			                		description = segments.get(3);
+			                		sprite = segments.get(4);
+			                		strength = Integer.parseInt(segments.get(5));
+			                	} else if (ID >= 6000 & ID <= 9999){
+			                		health = Integer.parseInt(segments.get(2));
+			                		sprite = segments.get(3);
+			                		strength = Integer.parseInt(segments.get(4));
+			                	}
+			                	
+			                	
+			                	if (ID >= 1000 || ID <=1999) { 	//armor
+			                		gameObjects.put(ID, new ClickableObject(new Armor(ID,name,value,description,sprite,strength)));
+			                		
+			                	} else if (ID >= 2000 || ID <=2999) {	//weapon
+			                		gameObjects.put(ID, new ClickableObject(new Weapon(ID,name,value,description,sprite,strength)));
+			                		
+			                	} else if (ID >= 3000 || ID <=3999) {	//key
+			                		gameObjects.put(ID, new ClickableObject(new Key(ID,name,value,description,sprite)));
+			                		
+			                	} else if (ID >= 4000 || ID <=4999) {	//consumable
+			                		gameObjects.put(ID, new ClickableObject(new Consumable(ID,name,value,description,sprite,strength)));
+			                		
+			                	} else if (ID >= 5000 || ID <=5999) {	//door (currently unused)
+			                		//implement later	
+			                		
+			                	} else if (ID >= 6000 || ID <=6999) {	//generic Entity
+			                		gameObjects.put(ID, new ClickableObject(new Entity(ID,name,health,sprite,strength)));
+			                		
+			                	} else if (ID >= 7000 || ID <=7999) {	//Enemy
+			                		
+			                		gameObjects.put(ID, new ClickableObject(new Enemy(ID,name,health,sprite,strength)));
+			                	} else if (ID >= 8000 || ID <=8999) {	//Quest Giver
+			                		
+			                		gameObjects.put(ID, new ClickableObject(new QuestGiver(ID,name,health,sprite,strength)));
+			                	} else if (ID >= 9000 || ID <=9999) {	//Merchant
+			                		
+			                		gameObjects.put(ID, new ClickableObject(new Merchant(ID,name,health,sprite,strength)));
+			                	}else {
+			                		//nothing cause its not valid (maybe delete?)
+			                	}
+			                	
+			                }
+			                
+			                line = rdr.readLine();
+			            }
+					}
+					catch (Exception ex) {
+		            	System.out.printf("Failed for %s\n", f.getName() + " " + errorAt);
+		            }
+	            }
+	        }
+			
 		}
 		else {
 			//load from save
+			gameMap = save1.getMap();
+			currentRoom = gameMap.get(save1.getCurrentRoom());
+			p = save1.getPlayer();
+			player = save1.getPlayerObject();
 		}
 	}
 	
@@ -308,12 +410,12 @@ public class CS378 extends KeyAdapter{
 		heart.setBounds(0.9, 0.5, 1.0 / 14.2, 1.0 / 8.0);
 		UIPanel.add(heart);
 		
-		ClickableObject sheriff = new ClickableObject(new QuestGiver("Sheriff",100,20));
+		ClickableObject sheriff = new ClickableObject(new QuestGiver(8000,"Sheriff",100,"",20));
 		sheriff.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/sheriff.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
 		sheriff.setBounds(0.88, 0.86, 1.0 / 28.4, 1.0 / 8.0);
 		UIPanel.add(sheriff);
 		
-		ClickableObject Goblin = new ClickableObject(new Enemy("Goblin",100,20));
+		ClickableObject Goblin = new ClickableObject(new Enemy(7000,"Goblin",100,"",20));
 		Goblin.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/goblin.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
 		Goblin.setBounds(0.95, 0.1, 1.0 / 20.4, 1.0 / 8.0);
 		UIPanel.add(Goblin);

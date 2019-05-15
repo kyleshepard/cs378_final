@@ -1,4 +1,3 @@
-ID,Name,Background,North,East,South,West,Items
-1000,Beach,beach.png,0,1001,0,0,2000 .5 .5
-1001,Village of Jaxon,jaxon_gate.png,(jaxon_north),1002,0,1000,
-1002,Village of Jaxon,jaxon_east.png,0,0,0,1001,
+ID,Name,Description,Sprite,Destination
+5000,Door 1,door uno,door_generic.png,5001
+5001,Door 2,door dos,door_generic.png,5000

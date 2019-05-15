@@ -3,20 +3,22 @@ import java.awt.Point;
 
 import javax.swing.ImageIcon;
 
-public abstract class Entity implements Clickable{
+public class Entity implements Clickable{
 	
 	protected String name;
 	protected int health;
+	protected int ID;
 	protected double strength;
 	protected String sprite;
 	protected boolean hasDestination;
 	protected boolean active;
 	
-	public Entity(String name, int health, int strength) { //fully featured constructor for basic entity. (might delete later)
+	public Entity(int ID, String name, int health, String sprite, int strength) { //fully featured constructor for basic entity. (might delete later)
+		this.ID = ID;
 		this.name = name;
 		this.health = health;
 		this.strength = strength;
-		//sprite = _sprite;
+		this.sprite = sprite;
 	}
 	
 	public Entity() {	// default constructor

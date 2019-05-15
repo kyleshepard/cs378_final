@@ -3,8 +3,8 @@ import java.awt.Point;
 public class Enemy extends Entity{
 	public String EnemyType;
 	
-	public Enemy(String name, int health, int strength) {
-		super(name, health, strength);
+	public Enemy(int ID, String name, int health, String sprite, int strength) {
+		super(ID, name, health, sprite, strength);
 	}
 
 	@Override
