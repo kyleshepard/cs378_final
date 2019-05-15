@@ -205,7 +205,7 @@ public class CS378 extends KeyAdapter{
 										
 									}
 									else {
-											//Player.addItemToInventory(KillQuest.reward);
+											Player.addItemToInventory(KillQuest.reward);
 											menu.removeAll();
 											menu.setVisible(false);
 											FinishQuest.setEnabled(false);
