@@ -3,6 +3,7 @@ import java.awt.Point;
 public class Item implements Clickable{
 	protected String name;
 	protected String description;
+	String sprite;
 	protected int ID;
 	protected int value;
 	protected boolean active;
@@ -11,11 +12,12 @@ public class Item implements Clickable{
 		
 	}
 	
-	public Item(int ID, String name, int value, String description) {
+	public Item(int ID, String name, int value, String description, String sprite) {
 		this.ID = ID;
 		this.name = name;
 		this.value = value;
 		this.description = description;
+		this.sprite = sprite;
 	}
 	
 	public void onClick() {
