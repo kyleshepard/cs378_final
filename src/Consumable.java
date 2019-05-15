@@ -7,7 +7,7 @@ protected int strength;
 		
 	}
 	
-	public Consumable(int ID, String name, int value, String description, int strength, String sprite) {
+	public Consumable(int ID, String name, int value, String description, String sprite, int strength) {
 		super(ID, name, value, description, sprite);
 		this.strength = strength;
 	}
