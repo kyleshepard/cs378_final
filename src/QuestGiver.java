@@ -19,13 +19,14 @@ public class QuestGiver extends Entity{
 	
 	@Override
 	public void onClick(){
-		if(Player.searchQuest(123) == false) {
-			CS378.DialogueBox.setEnabled(true);
+		if(getName().equals("Sheriff")) {
+			if(Player.searchQuest(123) == false) {
+				CS378.DialogueBox.setEnabled(true);
+			}
+			else {
+				CS378.FinishQuest.setEnabled(true);
+			}
 		}
-		else {
-			CS378.FinishQuest.setEnabled(true);
-		}
-	
 	
 }
 }

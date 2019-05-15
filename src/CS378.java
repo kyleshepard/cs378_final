@@ -177,14 +177,14 @@ public class CS378 extends KeyAdapter{
 							DialogueBox.drawMenu();
 							int choice = DialogueBox.getChoice();
 							
-							if(choice == 1) {
+							if(choice == 3) {
 								
 								//System.out.println("Would you kindly kill some goblins?");
 								Player.addQuest(new KillQuest());
 								menu.setVisible(false);
 								DialogueBox.setEnabled(false);
 							}
-							else if(choice == 2) {
+							else if(choice == 4) {
 								
 								//System.out.println("Kill those boyos");
 								//Player.addQuest(new KillQuest());
@@ -197,7 +197,7 @@ public class CS378 extends KeyAdapter{
 							FinishQuest.drawMenu();
 							int choice = FinishQuest.getChoice();
 							
-							if(choice == 1) {
+							if(choice == 3) {
 									if(Player.getQuest(123).checkIsComplete() != true) {
 										menu.removeAll();
 										menu.setVisible(false);
@@ -212,7 +212,7 @@ public class CS378 extends KeyAdapter{
 											Player.deleteQuest(123);
 									}
 							}
-							if(choice == 2) {
+							if(choice == 4) {
 								FinishQuest.setEnabled(false);
 								menu.setVisible(false);
 							}
@@ -287,9 +287,9 @@ public class CS378 extends KeyAdapter{
 		mainMenu = new Menu(mm);
 		String[] pm = {"Resume","Save","Load","Exit"};
 		pauseMenu = new Menu(pm);
-		String[] gq = {"Accept","Decline"};
+		String[] gq = {"Kill that Goblin. ", "Repeatedly.","Accept","Decline"};
 		DialogueBox = new Menu(gq);
-		String[] fq = {"Complete Quest", "Keep Quest"};
+		String[] fq = {"Have you gotten rid of"," that Goblin yet?", "Complete Quest", "Keep Quest"};
 		FinishQuest = new Menu(fq);
 		
 		layeredPane.setLayer(menu, 2);
