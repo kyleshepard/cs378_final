@@ -2,7 +2,7 @@
 public class Quest {
 	private boolean isComplete;
 	public int ID;
-	public Item reward;
+	public static Item reward;
 	public String name;
 	public Integer count;
 	/**
