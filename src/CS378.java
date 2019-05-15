@@ -35,8 +35,9 @@ public class CS378 extends KeyAdapter{
 	
 	
 	public static Menu DialogueBox = new Menu();
+	public static Menu FinishQuest = new Menu();
 	private static Menu mainMenu = new Menu();
-	private static Menu pauseMenu = new Menu();
+	private static Menu pauseMenu = new Menu();  
 	
 	private static UIObject healthUI = new UIObject();
 	private static UIObject compassUI = new UIObject();
@@ -191,6 +192,31 @@ public class CS378 extends KeyAdapter{
 								DialogueBox.setEnabled(false);
 							}
 						}
+						if (FinishQuest.getEnabled()) {
+							menu.setVisible(true);
+							FinishQuest.drawMenu();
+							int choice = FinishQuest.getChoice();
+							
+							if(choice == 1) {
+									if(Player.getQuest(123).checkIsComplete() != true) {
+										menu.removeAll();
+										menu.setVisible(false);
+										FinishQuest.setEnabled(false);
+										
+									}
+									else {
+											//Player.addItemToInventory(KillQuest.reward);
+											menu.removeAll();
+											menu.setVisible(false);
+											FinishQuest.setEnabled(false);
+											Player.deleteQuest(123);
+									}
+							}
+							if(choice == 2) {
+								FinishQuest.setEnabled(false);
+								menu.setVisible(false);
+							}
+						}
 					}
 				};
 				
@@ -263,6 +289,8 @@ public class CS378 extends KeyAdapter{
 		pauseMenu = new Menu(pm);
 		String[] gq = {"Accept","Decline"};
 		DialogueBox = new Menu(gq);
+		String[] fq = {"Complete Quest", "Keep Quest"};
+		FinishQuest = new Menu(fq);
 		
 		layeredPane.setLayer(menu, 2);
 		menu.setBounds(0, 0, Res.x, Res.y);

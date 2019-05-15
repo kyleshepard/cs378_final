@@ -39,9 +39,21 @@ public class Player extends Entity{
 		}
 		return null;
 	}
+	public static boolean searchQuest(int questID) {
+		for(Quest q : questList) {
+			if(q.getID() == questID) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
-	public static void deleteQuest(Quest crap) {
-		questList.remove(crap);
+	public static void deleteQuest(int questID) {
+		for(Quest q : questList) {
+			if(q.getID() == questID) {
+				questList.remove(q);
+			}
+		}
 	}
 	
 	public static Vector<Quest> getQuestList() {

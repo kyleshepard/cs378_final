@@ -12,18 +12,20 @@ public class QuestGiver extends Entity{
 	Player.addQuest(item);
 	}
 	
-	public void RemoveQuest(Quest item) {
-		Player.deleteQuest(item);
-	}
+//	public void RemoveQuest(Quest item) {
+//		Player.deleteQuest(item);
+//	}
 
 	
 	@Override
 	public void onClick(){
-		CS378.DialogueBox.setEnabled(true);
-		
-		
-		
-	}
+		if(Player.searchQuest(123) == false) {
+			CS378.DialogueBox.setEnabled(true);
+		}
+		else {
+			CS378.FinishQuest.setEnabled(true);
+		}
 	
 	
+}
 }
