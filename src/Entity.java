@@ -62,5 +62,6 @@ public class Entity implements Clickable{
 	public double getStrength() { return strength; }
 	public boolean hasDestination() { return hasDestination; }
 	public boolean isActive() { return active; }
+	public String getSprite() { return sprite; }
 
 }

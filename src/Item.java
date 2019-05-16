@@ -44,5 +44,5 @@ public class Item implements Clickable{
 	}
 	
 	public boolean isActive() { return active; }
-	
+	public String getSprite() { return sprite; }
 }

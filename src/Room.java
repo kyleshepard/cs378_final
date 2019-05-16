@@ -15,7 +15,7 @@ public class Room implements java.io.Serializable{
 		
 	}
 	
-	public Room(int ID, String name, String background, int north, int south, int east, int west) {
+	public Room(int ID, String name, String background, int north, int south, int east, int west, Vector<ClickableObject> initialState) {
 		this.ID = ID;
 		this.name = name;
 		this.background = background;
@@ -24,6 +24,7 @@ public class Room implements java.io.Serializable{
 		this.east = east;
 		this.west = west;
 		firstVisit = true;
+		this.initialState = initialState;
 	}
 	
 	int getAdjacentRoom(char d) {

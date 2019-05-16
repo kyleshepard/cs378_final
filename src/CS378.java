@@ -58,7 +58,7 @@ public class CS378{
 	static Save save1 = new Save();
 
 		//test room stuff
-	static Room currentRoom = new Room(57,"Cool City","beach.png", 0, 0, 0, 0);
+	static Room currentRoom = new Room(57,"Cool City","beach.png", 0, 0, 0, 0,null);
 	
 	/**
 	 * Launch the application.
@@ -134,6 +134,7 @@ public class CS378{
 							if(choice == 1) {
 								System.out.println("start!");
 								loadAssets(true);
+								//loadRoom(1000);
 								UIPanel.setVisible(true);
 								background.setVisible(true);
 								menu.setVisible(false);
@@ -266,19 +267,37 @@ public class CS378{
 			            line = rdr.readLine();
 		
 			            while (line != null) {
+			            	errorAt = line;
 			            	
 			            	Vector<String> segments = new Vector<>();		//we use a vector to store each piece of info because we don't know how many parameters to expect
 			                segments = new Vector<String>(Arrays.asList(line.split(",")));	//the vector is created with each element representing a single parameter
 			                
-			                int ID = Integer.parseInt(segments.elementAt(0));
+			                int ID = Integer.parseInt(segments.elementAt(0));	//0th and first elements always ID and name
+			                String name = segments.get(1);
 			                
 			                if(f.getName().contentEquals("Rooms.csv")) {	//prepare to add to game map
-			                	
 			                	//System.out.println(segments.elementAt(0));
+			                	String sprite = segments.get(2);
+			                	int north = Integer.parseInt(segments.get(3));
+			                	int east  = Integer.parseInt(segments.get(4));
+			                	int south = Integer.parseInt(segments.get(5));
+			                	int west  = Integer.parseInt(segments.get(6));
+			                	Vector<ClickableObject> initialState = new Vector<>();
+			                	Vector<String> itemCoordinates = new Vector<>();
+			                	
+			                	for (int i = 7; i < segments.size(); i++) {								//WARNING: this completely relies on the object being first declared in the gameObjects map!
+			                		itemCoordinates = new Vector<String>(Arrays.asList(segments.get(i).split(" ")));
+			                		ClickableObject temp = gameObjects.get(Integer.parseInt(itemCoordinates.get(0)));
+			                		temp.setBounds(Double.parseDouble(itemCoordinates.get(1)), Double.parseDouble(itemCoordinates.get(1)), 1.0 / 28.4, 1.0 / 8.0);
+			                		initialState.add(temp);
+			                	}
+			                	
+			                	gameMap.put(ID,new Room(ID,name,sprite,north,east,south,west,initialState));
+			                	
 			                	
 			                }else {											//prepare to add to item map
 			                	errorAt = line;
-			                	String name = segments.get(1);
+			                	//String name = segments.get(1);
 			                	int value = 0;
 			                	String description = "";
 			                	String sprite = "";
@@ -353,7 +372,33 @@ public class CS378{
 	static void loadRoom(int ID) {
 		//check if room to load exists before unloading
 		if(gameMap.get(ID) != null) {
-		
+			
+			UIPanel.removeAll();
+			buildUI();
+			
+			gameMap.put(currentRoom.getID(), currentRoom);
+			currentRoom = gameMap.get(ID);
+			if(currentRoom.firstVisit) {
+				currentRoom.firstTimeSetup();
+			}
+			
+			Vector<ClickableObject> objects = currentRoom.getObjects();
+			
+			backgroundLabel.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/Rooms/" + currentRoom.getBackground()),Res.x,Res.y));
+			
+			for(int i = 0; i < objects.size(); i++) {
+				ClickableObject temp = objects.get(i);
+				
+				if(temp.getObject() instanceof Entity)
+					temp.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/" + temp.getObject().getSprite()),(int)(Res.y/16.0), (int)(Res.y/8.0)));
+				else
+					temp.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/" + temp.getObject().getSprite()),(int)(Res.y/16.0), (int)(Res.y/8.0)));
+
+				UIPanel.add(temp);
+			}
+			
+		}else {
+			System.out.println("problem!");
 		}
 		//unload assets of current room
 		//load new assets (currentRoom = whatever(ID));
@@ -407,7 +452,7 @@ public class CS378{
 		background.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 			//background using JLabel to hold image
-		backgroundLabel = new JLabel(resizeIcon(new ImageIcon(curdir + "/assets/sprites/testbkg.jpg"),Res.x,Res.y));
+		//backgroundLabel = new JLabel(resizeIcon(new ImageIcon(curdir + "/assets/sprites/testbkg.jpg"),Res.x,Res.y));
 		backgroundLabel = new JLabel(resizeIcon(new ImageIcon(curdir + "/assets/sprites/Rooms/" + currentRoom.getBackground()),Res.x,Res.y));
 		background.add(backgroundLabel);
 		
@@ -418,21 +463,10 @@ public class CS378{
 		layeredPane.add(UIPanel);
 		UIPanel.setLayout(null);
 		
-			//define UI elements
-				//HP monitor
-		healthUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/heart.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
-		healthUI.setBounds(0.05, 6.8 / 8.0, 1.0 / 14.2, 1.0 / 8.0);
-		UIPanel.add(healthUI);
-				//Compass for navigation
-		compassUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/compassrose.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
-		compassUI.setBounds((Res.x / 2) - ((int)(Res.y/8.0) / 2), (int)(6.8 * Res.y / 8.0), (int)(Res.y/8.0), (int)(Res.y/8.0));
-		UIPanel.add(compassUI);
+		buildUI();
 		
-		pause.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/pause.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
-		pause.setBounds(0.02, 0.05, 1.0 / 14.2, 1.0 / 8.0);
-		UIPanel.add(pause);
 		
-		//test code
+		  //test code
 		ClickableObject heart = new ClickableObject(new Item(1000,"heart",5,"issa heart",""));
 		heart.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/heart.png"),(int)(Res.y/16.0), (int)(Res.y/16.0)));
 		heart.setBounds(0.9, 0.5, 1.0 / 14.2, 1.0 / 8.0);
@@ -447,6 +481,9 @@ public class CS378{
 		Goblin.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/goblin.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
 		Goblin.setBounds(0.95, 0.1, 1.0 / 20.4, 1.0 / 8.0);
 		UIPanel.add(Goblin);
+		
+		
+		//loadRoom(1000);
 		
 			//player
 		player.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/player.png"),(int)(Res.y/16.0), (int)(Res.y/8.0)));
@@ -489,6 +526,20 @@ public class CS378{
 		//System.out.println(UIPanel.getInputMap().allKeys()); //prints null ???
 	}
 	
+	static void buildUI() { 	//define UI elements
+			//HP monitor
+		healthUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/heart.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
+		healthUI.setBounds(0.05, 6.8 / 8.0, 1.0 / 14.2, 1.0 / 8.0);
+		UIPanel.add(healthUI);
+			//Compass for navigation
+		compassUI.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/compassrose.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
+		compassUI.setBounds((Res.x / 2) - ((int)(Res.y/8.0) / 2), (int)(6.8 * Res.y / 8.0), (int)(Res.y/8.0), (int)(Res.y/8.0));
+		UIPanel.add(compassUI);
+			//pause button
+		pause.setIcon(resizeIcon(new ImageIcon(curdir + "/assets/sprites/uielements/pause.png"),(int)(Res.y/8.0), (int)(Res.y/8.0)));
+		pause.setBounds(0.02, 0.05, 1.0 / 14.2, 1.0 / 8.0);
+		UIPanel.add(pause);
+	}
 
 	private static void quitGame() {
 		frame.setVisible(false);
