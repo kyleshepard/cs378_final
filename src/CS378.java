@@ -213,7 +213,7 @@ public class CS378{
 										
 									}
 									else {
-											//Player.addItemToInventory(KillQuest.reward);
+											Player.addItemToInventory(KillQuest.reward);
 											menu.removeAll();
 											menu.setVisible(false);
 											FinishQuest.setEnabled(false);

@@ -1,10 +1,10 @@
-public class KillQuest extends Quest {
-	public static QuestGiver Sheriff;
-	public int NumberToKill;
-	public Enemy EnemyToKill;	
+public class KillQuest extends Quest {	//KillQuest is an extension of Quest
+	public static QuestGiver Sheriff;	//Only given by Sheriff
+	public int NumberToKill;			//Has a number of Enemies to kill to complete
+	public Enemy EnemyToKill;			//Has an Enemy type to kill
 	//public int reward;
 	
-	public KillQuest(){
+	public KillQuest(){					// Base constructor
 		name = "Kill Goblins!";
 		ID = 123;
 		NumberToKill = 10;

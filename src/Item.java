@@ -12,7 +12,7 @@ public class Item implements Clickable{
 		
 	}
 	
-	public Item(int ID, String name, int value, String description, String sprite) {
+	public Item(int ID, String name, int value, String description, String sprite) {	//Base constructor
 		this.ID = ID;
 		this.name = name;
 		this.value = value;
@@ -22,7 +22,7 @@ public class Item implements Clickable{
 	
 	public void onClick() {
 		
-		if(Player.addItemToInventory(this)) {
+		if(Player.addItemToInventory(this)) {	//If you click on an item, it attempts to add it to the inventory
 			System.out.println(name + " added to inventory.");
 			active = false;
 		}
@@ -31,18 +31,19 @@ public class Item implements Clickable{
 		}
 	}
 	
-	public void setActive( boolean active ) { this.active = active;}
+	public void setActive( boolean active ) { this.active = active;}	//Setter to set an item as active or not
 	
-	public String getName() { return name; }
-	public String getDescription() { return description; }
-	public int getID() { return ID; }
-	public int getValue() { return value; }
+	public String getName() { return name; }	//Getter to return the Name of an item
+	public String getDescription() { return description; }	//Getter to return the Description of an item
+	public int getID() { return ID; }	//Getter to return the ID of an Item
+	public int getValue() { return value; }	//Getter to return the Value of an Item
 
 	@Override
-	public Point updateLocation(Point p1, Point p2) {
+	public Point updateLocation(Point p1, Point p2) {	//Lets you draw the object at a new point
 		return p1;
 	}
 	
-	public boolean isActive() { return active; }
 	public String getSprite() { return sprite; }
+	public boolean isActive() { return active; }	//Getter to return whether or not the item is active
+	
 }

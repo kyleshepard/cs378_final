@@ -1,5 +1,5 @@
 
-public class Quest {
+public class Quest {			//A quest can be complete, and holds an ID, a Name, a Count, and a reward
 	private boolean isComplete;
 	public int ID;
 	public static Item reward;
@@ -25,5 +25,5 @@ public class Quest {
 		isComplete = false;
 	}
 	
-	public int getID() { return ID; }
+	public int getID() { return ID; }	//Getter to return the Quest ID
 }
